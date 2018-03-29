@@ -1,8 +1,4 @@
-let GetProductSimpleFromQuery = function (ncUtil,
-                                 channelProfile,
-                                 flowContext,
-                                 payload,
-                                 callback) {
+let GetProductSimpleFromQuery = function (ncUtil, channelProfile, flowContext, payload, callback) {
 
   log("Building response object...", ncUtil);
   let out = {
@@ -17,37 +13,37 @@ let GetProductSimpleFromQuery = function (ncUtil,
   //If ncUtil does not contain a request object, the request can't be sent
   if (!ncUtil) {
     invalid = true;
-    invalidMsg = "ncUtil was not provided"
+    invalidMsg = "ncUtil was not provided";
   }
 
   //If channelProfile does not contain channelSettingsValues, channelAuthValues or productBusinessReferences, the request can't be sent
   if (!channelProfile) {
     invalid = true;
-    invalidMsg = "channelProfile was not provided"
+    invalidMsg = "channelProfile was not provided";
   } else if (!channelProfile.channelSettingsValues) {
     invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues was not provided"
+    invalidMsg = "channelProfile.channelSettingsValues was not provided";
   } else if (!channelProfile.channelSettingsValues.protocol) {
     invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided"
+    invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided";
   } else if (!channelProfile.channelAuthValues) {
     invalid = true;
-    invalidMsg = "channelProfile.channelAuthValues was not provided"
+    invalidMsg = "channelProfile.channelAuthValues was not provided";
   } else if (!channelProfile.productBusinessReferences) {
     invalid = true;
-    invalidMsg = "channelProfile.productBusinessReferences was not provided"
+    invalidMsg = "channelProfile.productBusinessReferences was not provided";
   } else if (!Array.isArray(channelProfile.productBusinessReferences)) {
     invalid = true;
-    invalidMsg = "channelProfile.productBusinessReferences is not an array"
+    invalidMsg = "channelProfile.productBusinessReferences is not an array";
   } else if (channelProfile.productBusinessReferences.length === 0) {
     invalid = true;
-    invalidMsg = "channelProfile.productBusinessReferences is empty"
+    invalidMsg = "channelProfile.productBusinessReferences is empty";
   }
 
   //If a sales order document was not passed in, the request is invalid
   if (!payload) {
     invalid = true;
-    invalidMsg = "payload was not provided"
+    invalidMsg = "payload was not provided";
   } else if (!payload.doc) {
     invalid = true;
     invalidMsg = "payload.doc was not provided";
@@ -56,14 +52,14 @@ let GetProductSimpleFromQuery = function (ncUtil,
   //If callback is not a function
   if (!callback) {
     throw new Error("A callback function was not provided");
-  } else if (typeof callback !== 'function') {
-    throw new TypeError("callback is not a function")
+  } else if (typeof callback !== "function") {
+    throw new TypeError("callback is not a function");
   }
 
   if (!invalid) {
     // Using request for example - A different npm module may be needed depending on the API communication is being made to
     // The `soap` module can be used in place of `request` but the logic and data being sent will be different
-    let request = require('request');
+    let request = require("request");
 
     let url = "https://localhost/";
 
@@ -134,7 +130,9 @@ let GetProductSimpleFromQuery = function (ncUtil,
           // If an error occurs, log the error here
           logError("Do GetProductSimpleFromQuery Callback error - " + error, ncUtil);
           out.ncStatusCode = 500;
-          out.payload.error = {err: error};
+          out.payload.error = {
+            err: error
+          };
           callback(out);
         }
       });
@@ -142,7 +140,10 @@ let GetProductSimpleFromQuery = function (ncUtil,
       // Exception Handling
       logError("Exception occurred in GetProductSimpleFromQuery - " + err, ncUtil);
       out.ncStatusCode = 500;
-      out.payload.error = {err: err, stack: err.stackTrace};
+      out.payload.error = {
+        err: err,
+        stack: err.stackTrace
+      };
       callback(out);
     }
   } else {
@@ -162,4 +163,4 @@ function log(msg, ncUtil) {
   console.log("[info] " + msg);
 }
 
-module.exports.GetProductSimpleFromQuery = GetProductFromQuery;
+module.exports.GetProductSimpleFromQuery = GetProductSimpleFromQuery;
