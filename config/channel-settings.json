@@ -508,7 +508,7 @@
     "configDef": {
       "configModel": {
         "type": "object",
-        "title": "Template Channel Settings",
+        "title": "iQmetrix Dropship Channel Settings",
         "properties": {
           "protocol": {
             "title": "Protocol",
@@ -517,40 +517,74 @@
           "implFolderName": {
             "title": "Implementation Folder Name",
             "type": "string"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "subscriptionLists": {
+            "title": "Subscription Lists",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "listId": {
+                  "title": "List ID",
+                  "type": "string"
+                },
+                "entityId": {
+                  "title": "Entity ID",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "listId",
+                "entityId"
+              ]
+            }
           }
         },
         "required": [
           "protocol",
-          "implFolderName"
+          "implFolderName",
+          "environment",
+          "subscriptionLists"
         ]
       },
       "configView": [],
       "configValues": {
         "protocol": "https",
-        "implFolderName": "nav"
+        "implFolderName": "iqmetrix-dropship",
+        "environment": "demo"
       }
     }
   },
   "channelAuthSchema": {
-    "authType": "generic",
+    "authType": "oauth",
     "configDef": {
       "configModel": {
         "type": "object",
         "title": "Credentials Config",
         "properties": {
-          "account": {
-            "title": "Account Number",
+          "company_id": {
+            "title": "Company ID",
+            "type": "string"
+          },
+          "access_token": {
+            "title": "Access Token",
             "type": "string"
           }
         },
         "required": [
-          "account"
+          "company_id",
+          "access_token"
         ]
       },
       "configView": [
 				{
-					"key": "account",
-					"title": "Account Number"
+					"key": "company_id",
+					"title": "Company ID"
 				}
       ],
       "configValues": {}
