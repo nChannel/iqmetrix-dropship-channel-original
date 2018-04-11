@@ -28,6 +28,12 @@ function isNonEmptyObject(obj) {
 function isFunction(obj) {
   return typeof obj === "function";
 }
+function isNumber(obj) {
+  return typeof obj === "number" && !isNaN(obj);
+}
+function isInteger(obj) {
+  return isNumber(obj) && obj % 1 === 0;
+}
 function getClass(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
 }
@@ -50,6 +56,8 @@ module.exports = {
   isEmptyObject,
   isNonEmptyObject,
   isFunction,
+  isNumber,
+  isInteger,
   getClass,
   log
 };
