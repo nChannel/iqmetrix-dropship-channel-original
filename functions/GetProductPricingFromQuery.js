@@ -226,7 +226,7 @@ async function buildResponseObject(products) {
     products.forEach(product => {
       out.payload.push({
         doc: product,
-        productRemoteID: "",
+        productPricingRemoteID: product.CatalogItemId,
         productBusinessReference: ""
       });
     });
