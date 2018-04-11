@@ -3,7 +3,15 @@ const nc = require("./util/ncUtils");
 const validationMessages = [];
 const out = { ncStatusCode: null, response: {}, payload: {} };
 const baseRequest = require("request-promise-native");
-let request, access_token, company_id, protocol, environment, subscriptionLists, startDateGMT, endDateGMT;
+let request,
+  access_token,
+  company_id,
+  protocol,
+  environment,
+  subscriptionLists,
+  startDateGMT,
+  endDateGMT,
+  productQuantityBusinessReferences;
 
 /**
  * The GetProductQuantityFromQuery function will retrieve available quantity from iQmetrix APIs.
@@ -218,7 +226,7 @@ async function buildResponseObject(products) {
       out.payload.push({
         doc: product,
         productQuantityRemoteID: product.CatalogItemId,
-        productBusinessReference: ""
+        productQuantityBusinessReference: nc.extractBusinessReferences(productQuantityBusinessReferences, product)
       });
     });
   } else {
@@ -257,6 +265,7 @@ async function validateArguments(ncUtil, channelProfile, flowContext, payload, c
   subscriptionLists = channelProfile.channelSettingsValues.subscriptionLists;
   startDateGMT = payload.doc.modifiedDateRange.startDateGMT;
   endDateGMT = payload.doc.modifiedDateRange.endDateGMT;
+  productQuantityBusinessReferences = channelProfile.productQuantityBusinessReferences;
 
   request = baseRequest.defaults({
     auth: {
@@ -285,7 +294,7 @@ function validateNcUtil(ncUtil) {
  * @param {object} channelProfile
  * @param {object} channelProfile.channelSettingsValues
  * @param {object} channelProfile.channelAuthValues
- * @param {string[]} channelProfile.productBusinessReferences
+ * @param {string[]} channelProfile.productQuantityBusinessReferences
  */
 function validateChannelProfile(channelProfile) {
   if (!nc.isObject(channelProfile)) {
@@ -293,10 +302,10 @@ function validateChannelProfile(channelProfile) {
   } else {
     validateChannelSettingsValues(channelProfile.channelSettingsValues);
     validateChannelAuthValues(channelProfile.channelAuthValues);
-    if (!nc.isNonEmptyArray(channelProfile.productBusinessReferences)) {
+    if (!nc.isNonEmptyArray(channelProfile.productQuantityBusinessReferences)) {
       validationMessages.push(
-        `The channelProfile.productBusinessReferences array is ${
-          channelProfile.productBusinessReferences == null ? "missing" : "invalid"
+        `The channelProfile.productQuantityBusinessReferences array is ${
+          channelProfile.productQuantityBusinessReferences == null ? "missing" : "invalid"
         }.`
       );
     }

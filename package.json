@@ -3,6 +3,7 @@
   "author": "",
   "description": "",
   "dependencies": {
+    "lodash.get": "^4.4.2",
     "request": "2.83.0",
     "request-promise-native": "1.0.5"
   },

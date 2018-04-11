@@ -38,6 +38,25 @@ function getClass(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
 }
 
+function extractBusinessReferences(businessReferences, doc) {
+  const _get = require("lodash.get");
+
+  if (!isArray(businessReferences)) {
+    throw new Error('Error: businessReferences must be an Array');
+  } else if (!isObject(doc)) {
+    throw new Error('Error: doc must be an object');
+  }
+
+  let values = [];
+
+  // Get the businessReference
+  businessReferences.forEach(function (businessReference) {
+    values.push(_get(doc, businessReference));
+  });
+
+  return values.join(".");
+}
+
 function log(msg, level = "info", stubName) {
   if (isNonEmptyString(stubName)) {
     msg = `${stubName}: ${msg}`;
@@ -59,5 +78,6 @@ module.exports = {
   isNumber,
   isInteger,
   getClass,
+  extractBusinessReferences,
   log
 };

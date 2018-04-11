@@ -3,7 +3,15 @@ const nc = require("./util/ncUtils");
 const validationMessages = [];
 const out = { ncStatusCode: null, response: {}, payload: {} };
 const baseRequest = require("request-promise-native");
-let request, access_token, company_id, protocol, environment, subscriptionLists, startDateGMT, endDateGMT;
+let request,
+  access_token,
+  company_id,
+  protocol,
+  environment,
+  subscriptionLists,
+  startDateGMT,
+  endDateGMT,
+  productSimpleBusinessReferences;
 
 /**
  * The GetProductSimpleFromQuery function will retrieve simple products from iQmetrix APIs.
@@ -43,7 +51,7 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
 
 /**
  * Pulls down the product headers for each subscription list provided
- * 
+ *
  * @returns array of arrays of products
  */
 async function getProductLists() {
@@ -54,7 +62,7 @@ async function getProductLists() {
 
 /**
  * Fetches products belonging to specified subscription list
- * 
+ *
  * @param {object} subscriptionList Provided by channelProfileSettings
  * @returns list of products with subscription list details appended to each product for future reference
  */
@@ -73,8 +81,8 @@ async function getProductList(subscriptionList) {
 
 /**
  * Groups products by base slug and keeps only those that are unique, indicating a simple product
- * 
- * @param {array} productLists 
+ *
+ * @param {array} productLists
  * @returns filtered array of simple products
  */
 async function keepSimpleItems(productLists) {
@@ -99,8 +107,8 @@ async function keepSimpleItems(productLists) {
 
 /**
  * Merges array of arrays into a single list of products
- * 
- * @param {array[]} productLists 
+ *
+ * @param {array[]} productLists
  * @returns array of products
  */
 async function flattenProductLists(productLists) {
@@ -110,8 +118,8 @@ async function flattenProductLists(productLists) {
 
 /**
  * Fetches product details for each product in batches of up to 500
- * 
- * @param {array} productList 
+ *
+ * @param {array} productList
  * @returns product list with additional details appended to each product
  */
 async function getProductDetails(productList) {
@@ -135,8 +143,8 @@ async function getProductDetails(productList) {
 
 /**
  * POST list of catalog ids to iQmetrix api and recieve array of product details
- * 
- * @param {array} catalogIds 
+ *
+ * @param {array} catalogIds
  * @returns product details
  */
 async function getProductDetailsBulk(catalogIds) {
@@ -153,8 +161,8 @@ async function getProductDetailsBulk(catalogIds) {
 /**
  * Checks the modified timestamp of both the product header and details
  * discards products that were not modified within the requested time frame.
- * 
- * @param {array} productList 
+ *
+ * @param {array} productList
  * @returns array of products
  */
 async function keepModifiedItems(productList) {
@@ -172,8 +180,8 @@ async function keepModifiedItems(productList) {
 
 /**
  * Remove all but the supplier specified with the associated subscription list
- * 
- * @param {array} productList 
+ *
+ * @param {array} productList
  * @returns array of products with unused vendors removed
  */
 async function filterVendors(productList) {
@@ -190,8 +198,8 @@ async function filterVendors(productList) {
 
 /**
  * Builds the response object to be provided to the callback function
- * 
- * @param {array} products 
+ *
+ * @param {array} products
  * @returns response object
  */
 async function buildResponseObject(products) {
@@ -203,7 +211,7 @@ async function buildResponseObject(products) {
       out.payload.push({
         doc: product,
         productSimpleRemoteID: product.CatalogItemId,
-        productBusinessReference: ""
+        productSimpleBusinessReference: nc.extractBusinessReferences(productSimpleBusinessReferences, product)
       });
     });
   } else {
@@ -214,12 +222,12 @@ async function buildResponseObject(products) {
 
 /**
  * Validates the arguments passed into this function
- * 
- * @param {object} ncUtil 
- * @param {object} channelProfile 
- * @param {object} flowContext 
- * @param {object} payload 
- * @param {function} callback 
+ *
+ * @param {object} ncUtil
+ * @param {object} channelProfile
+ * @param {object} flowContext
+ * @param {object} payload
+ * @param {function} callback
  */
 async function validateArguments(ncUtil, channelProfile, flowContext, payload, callback) {
   logInfo("Validating arguments...");
@@ -242,6 +250,7 @@ async function validateArguments(ncUtil, channelProfile, flowContext, payload, c
   subscriptionLists = channelProfile.channelSettingsValues.subscriptionLists;
   startDateGMT = payload.doc.modifiedDateRange.startDateGMT;
   endDateGMT = payload.doc.modifiedDateRange.endDateGMT;
+  productSimpleBusinessReferences = channelProfile.productSimpleBusinessReferences;
 
   request = baseRequest.defaults({
     auth: {
@@ -255,8 +264,8 @@ async function validateArguments(ncUtil, channelProfile, flowContext, payload, c
 
 /**
  * Validate that the ncUtil argument is an object
- * 
- * @param {object} ncUtil 
+ *
+ * @param {object} ncUtil
  */
 function validateNcUtil(ncUtil) {
   if (!nc.isObject(ncUtil)) {
@@ -266,11 +275,11 @@ function validateNcUtil(ncUtil) {
 
 /**
  * Validate that the channelProfile argument is an object and that it has specific properties that are required.
- * 
- * @param {object} channelProfile 
+ *
+ * @param {object} channelProfile
  * @param {object} channelProfile.channelSettingsValues
  * @param {object} channelProfile.channelAuthValues
- * @param {string[]} channelProfile.productBusinessReferences
+ * @param {string[]} channelProfile.productSimpleBusinessReferences
  */
 function validateChannelProfile(channelProfile) {
   if (!nc.isObject(channelProfile)) {
@@ -278,10 +287,10 @@ function validateChannelProfile(channelProfile) {
   } else {
     validateChannelSettingsValues(channelProfile.channelSettingsValues);
     validateChannelAuthValues(channelProfile.channelAuthValues);
-    if (!nc.isNonEmptyArray(channelProfile.productBusinessReferences)) {
+    if (!nc.isNonEmptyArray(channelProfile.productSimpleBusinessReferences)) {
       validationMessages.push(
-        `The channelProfile.productBusinessReferences array is ${
-          channelProfile.productBusinessReferences == null ? "missing" : "invalid"
+        `The channelProfile.productSimpleBusinessReferences array is ${
+          channelProfile.productSimpleBusinessReferences == null ? "missing" : "invalid"
         }.`
       );
     }
@@ -290,8 +299,8 @@ function validateChannelProfile(channelProfile) {
 
 /**
  * Validate that the channelSettingsValues parameter is an object and that it has specific properties that are required.
- * 
- * @param {object} channelSettingsValues 
+ *
+ * @param {object} channelSettingsValues
  * @param {string} channelSettingsValues.protocol
  * @param {string} channelSettingsValues.environment
  * @param {object[]} channelSettingsValues.subscriptionLists
@@ -328,10 +337,10 @@ function validateChannelSettingsValues(channelSettingsValues) {
 
 /**
  * Validate that the channelAuthValues parameter is an object and that it has specific properties that are required.
- * 
- * @param {object} channelAuthValues 
- * @param {string} channelAuthValues.company_id 
- * @param {string} channelAuthValues.access_token 
+ *
+ * @param {object} channelAuthValues
+ * @param {string} channelAuthValues.company_id
+ * @param {string} channelAuthValues.access_token
  */
 function validateChannelAuthValues(channelAuthValues) {
   if (!nc.isObject(channelAuthValues)) {
@@ -354,8 +363,8 @@ function validateChannelAuthValues(channelAuthValues) {
 
 /**
  * Validate that the flowContext argument is an object.
- * 
- * @param {object} flowContext 
+ *
+ * @param {object} flowContext
  */
 function validateFlowContext(flowContext) {
   if (!nc.isObject(flowContext)) {
@@ -365,8 +374,8 @@ function validateFlowContext(flowContext) {
 
 /**
  * Validate that the payload argument is an object and that it has specific properties that are required.
- * 
- * @param {object} payload 
+ *
+ * @param {object} payload
  * @param {object} payload.doc
  * @param {object} payload.doc.modifiedDateRange
  * @param {string} payload.doc.modifiedDateRange.startDateGMT
@@ -407,8 +416,8 @@ function validatePayload(payload) {
 
 /**
  * Validate that the callback argument is a function
- * 
- * @param {function} cb 
+ *
+ * @param {function} cb
  */
 function validateCallback(cb) {
   if (!nc.isFunction(cb)) {
