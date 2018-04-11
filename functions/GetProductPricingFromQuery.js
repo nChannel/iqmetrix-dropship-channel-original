@@ -148,7 +148,7 @@ async function filterVendors(productList) {
     const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
       return vendor.Entity && vendor.Entity.Id == entityId;
     });
-    product.ProductDetails.VendorSku = VendorSkus[0];
+    product.VendorSku = VendorSkus[0];
   });
   return productList;
 }
