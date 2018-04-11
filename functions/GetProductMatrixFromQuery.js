@@ -5,6 +5,17 @@ const out = { ncStatusCode: null, response: {}, payload: {} };
 const baseRequest = require("request-promise-native");
 let request, access_token, company_id, protocol, environment, subscriptionLists, startDateGMT, endDateGMT;
 
+/**
+ * The GetProductMatrixFromQuery function will retrieve matrix products from iQmetrix APIs.
+ *
+ * First, it will make 1 api call for each subscription list to fetch the product headers for that list.
+ * Then, it will filter the products to keep only matrix products
+ * Then, it will merge these lists into a single master list of products.
+ * Then, it will split the product list into batches of 500 products and make 1 api call per batch to fetch details.
+ * Then, it will filter the list to keep only those products that have been modified within the requested time frame.
+ * Then, it will filter the VendorSkus array to include only the supplier provided for the subscription list.
+ * Finally, it will pass the remaining products back to the callback function.
+ */
 function GetProductMatrixFromQuery(ncUtil, channelProfile, flowContext, payload, callback) {
   logInfo(`Beginning ${stubName}...`);
 
@@ -30,12 +41,23 @@ function GetProductMatrixFromQuery(ncUtil, channelProfile, flowContext, payload,
     });
 }
 
+/**
+ * Pulls down the product headers for each subscription list provided
+ * 
+ * @returns array of arrays of products
+ */
 async function getProductLists() {
   logInfo("Get product lists...");
   const productLists = await Promise.all(subscriptionLists.map(getProductList));
   return productLists;
 }
 
+/**
+ * Fetches products belonging to specified subscription list
+ * 
+ * @param {object} subscriptionList Provided by channelProfileSettings
+ * @returns list of products with subscription list details appended to each product for future reference
+ */
 async function getProductList(subscriptionList) {
   logInfo(`Get product list [${subscriptionList.listId}]...`);
   const response = await request.get({
@@ -49,6 +71,12 @@ async function getProductList(subscriptionList) {
   return response.body.Items;
 }
 
+/**
+ * Groups products by base slug and keeps only those that are not unique, indicating a matrix product
+ * 
+ * @param {array} productLists 
+ * @returns filtered array of matrix products
+ */
 async function keepMatrixItems(productLists) {
   logInfo("Keep matrix items...");
   let totalCount = 0;
@@ -69,14 +97,25 @@ async function keepMatrixItems(productLists) {
   return filteredProductLists;
 }
 
+/**
+ * Merges array of arrays into a single list of products
+ * 
+ * @param {array[]} productLists 
+ * @returns array of products
+ */
 async function flattenProductLists(productLists) {
   logInfo("Flatten product lists...");
   return [].concat(...productLists);
 }
 
+/**
+ * Fetches product details for each product in batches of up to 500
+ * 
+ * @param {array} productList 
+ * @returns product list with additional details appended to each product
+ */
 async function getProductDetails(productList) {
   logInfo("Get product details...");
-  //const productDetails = await Promise.all(productList.map(getProductDetail));
   const allIds = productList.map(p => p.CatalogItemId);
   const batchedIds = [];
   const max = 500;
@@ -94,6 +133,12 @@ async function getProductDetails(productList) {
   return productList;
 }
 
+/**
+ * POST list of catalog ids to iQmetrix api and recieve array of product details
+ * 
+ * @param {array} catalogIds 
+ * @returns product details
+ */
 async function getProductDetailsBulk(catalogIds) {
   logInfo(`Get ${catalogIds.length} product details...`);
   const response = await request.post({
@@ -105,17 +150,13 @@ async function getProductDetailsBulk(catalogIds) {
   return response.body.CatalogItems;
 }
 
-async function getProductDetail(product) {
-  logInfo("Get product detail...");
-  const response = await request.get({
-    url: `${protocol}://catalogs${environment}.iqmetrix.net/v1/Companies(${company_id})/Catalog/Items(${
-      product.CatalogItemId
-    })/ProductDetails`
-  });
-  product.ProductDetails = response.body;
-  return product;
-}
-
+/**
+ * Checks the modified timestamp of both the product header and details
+ * discards products that were not modified within the requested time frame.
+ * 
+ * @param {array} productList 
+ * @returns array of products
+ */
 async function keepModifiedItems(productList) {
   logInfo("Keep modified items...");
   const start = Date.parse(startDateGMT);
@@ -129,6 +170,12 @@ async function keepModifiedItems(productList) {
   return products;
 }
 
+/**
+ * Remove all but the supplier specified with the associated subscription list
+ * 
+ * @param {array} productList 
+ * @returns array of products with unused vendors removed
+ */
 async function filterVendors(productList) {
   logInfo("Filter vendors...");
   productList.forEach(product => {
@@ -140,6 +187,12 @@ async function filterVendors(productList) {
   return productList;
 }
 
+/**
+ * Builds the response object to be provided to the callback function
+ * 
+ * @param {array} products 
+ * @returns response object
+ */
 async function buildResponseObject(products) {
   logInfo(`Submitting ${products.length} modified products...`);
   if (products.length > 0) {
@@ -158,6 +211,15 @@ async function buildResponseObject(products) {
   return out;
 }
 
+/**
+ * Validates the arguments passed into this function
+ * 
+ * @param {object} ncUtil 
+ * @param {object} channelProfile 
+ * @param {object} flowContext 
+ * @param {object} payload 
+ * @param {function} callback 
+ */
 async function validateArguments(ncUtil, channelProfile, flowContext, payload, callback) {
   logInfo("Validating arguments...");
   validateCallback(callback);
@@ -190,12 +252,25 @@ async function validateArguments(ncUtil, channelProfile, flowContext, payload, c
   });
 }
 
+/**
+ * Validate that the ncUtil argument is an object
+ * 
+ * @param {object} ncUtil 
+ */
 function validateNcUtil(ncUtil) {
   if (!nc.isObject(ncUtil)) {
     validationMessages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
   }
 }
 
+/**
+ * Validate that the channelProfile argument is an object and that it has specific properties that are required.
+ * 
+ * @param {object} channelProfile 
+ * @param {object} channelProfile.channelSettingsValues
+ * @param {object} channelProfile.channelAuthValues
+ * @param {string[]} channelProfile.productBusinessReferences
+ */
 function validateChannelProfile(channelProfile) {
   if (!nc.isObject(channelProfile)) {
     validationMessages.push(`The channelProfile object is ${channelProfile == null ? "missing" : "invalid"}.`);
@@ -212,6 +287,14 @@ function validateChannelProfile(channelProfile) {
   }
 }
 
+/**
+ * Validate that the channelSettingsValues parameter is an object and that it has specific properties that are required.
+ * 
+ * @param {object} channelSettingsValues 
+ * @param {string} channelSettingsValues.protocol
+ * @param {string} channelSettingsValues.environment
+ * @param {object[]} channelSettingsValues.subscriptionLists
+ */
 function validateChannelSettingsValues(channelSettingsValues) {
   if (!nc.isObject(channelSettingsValues)) {
     validationMessages.push(
@@ -242,6 +325,13 @@ function validateChannelSettingsValues(channelSettingsValues) {
   }
 }
 
+/**
+ * Validate that the channelAuthValues parameter is an object and that it has specific properties that are required.
+ * 
+ * @param {object} channelAuthValues 
+ * @param {string} channelAuthValues.company_id 
+ * @param {string} channelAuthValues.access_token 
+ */
 function validateChannelAuthValues(channelAuthValues) {
   if (!nc.isObject(channelAuthValues)) {
     validationMessages.push(`The channelAuthValues object is ${channelAuthValues == null ? "missing" : "invalid"}.`);
@@ -261,12 +351,26 @@ function validateChannelAuthValues(channelAuthValues) {
   }
 }
 
+/**
+ * Validate that the flowContext argument is an object.
+ * 
+ * @param {object} flowContext 
+ */
 function validateFlowContext(flowContext) {
   if (!nc.isObject(flowContext)) {
     validationMessages.push(`The flowContext object is ${flowContext == null ? "missing" : "invalid"}.`);
   }
 }
 
+/**
+ * Validate that the payload argument is an object and that it has specific properties that are required.
+ * 
+ * @param {object} payload 
+ * @param {object} payload.doc
+ * @param {object} payload.doc.modifiedDateRange
+ * @param {string} payload.doc.modifiedDateRange.startDateGMT
+ * @param {string} payload.doc.modifiedDateRange.endDateGMT
+ */
 function validatePayload(payload) {
   if (!nc.isObject(payload)) {
     validationMessages.push(`The payload object is ${payload == null ? "missing" : "invalid"}.`);
@@ -300,6 +404,11 @@ function validatePayload(payload) {
   }
 }
 
+/**
+ * Validate that the callback argument is a function
+ * 
+ * @param {function} cb 
+ */
 function validateCallback(cb) {
   if (!nc.isFunction(cb)) {
     logError(`The callback function is ${cb == null ? "missing" : "invalid"}.`);
