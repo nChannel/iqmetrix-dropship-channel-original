@@ -522,6 +522,10 @@
             "title": "Environment",
             "type": "string"
           },
+          "maxParallelRequests": {
+            "title": "Max number of parallel requests",
+            "type": "integer"
+          },
           "subscriptionLists": {
             "title": "Subscription Lists",
             "type": "array",
@@ -549,6 +553,7 @@
           "protocol",
           "implFolderName",
           "environment",
+          "maxParallelRequests",
           "subscriptionLists"
         ]
       },
@@ -571,6 +576,10 @@
             "title": "Company ID",
             "type": "string"
           },
+          "location_id": {
+            "title": "Location ID",
+            "type": "string"
+          },
           "access_token": {
             "title": "Access Token",
             "type": "string"
@@ -578,6 +587,7 @@
         },
         "required": [
           "company_id",
+          "location_id",
           "access_token"
         ]
       },
@@ -585,6 +595,10 @@
 				{
 					"key": "company_id",
 					"title": "Company ID"
+        },
+        {
+					"key": "location_id",
+					"title": "Location ID"
 				}
       ],
       "configValues": {}
