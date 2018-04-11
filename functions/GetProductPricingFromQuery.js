@@ -144,9 +144,10 @@ async function filterVendors(productList) {
   logInfo("Filter vendors...");
   productList.forEach(product => {
     const entityId = product.subscriptionList.entityId;
-    product.ProductDetails.VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
+    const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
       return vendor.Entity && vendor.Entity.Id == entityId;
     });
+    product.ProductDetails.VendorSku = VendorSkus[0];
   });
   return productList;
 }
