@@ -539,7 +539,7 @@
                 },
                 "entityId": {
                   "title": "Entity ID",
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "required": [
