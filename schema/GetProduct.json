@@ -75,12 +75,24 @@
             "type": "string",
             "title": "DateUpdatedUtc (DateTime)",
             "description": "Date this Product was last updated, in UTC"
-          },
-          "ExtendedAttributes": {
-            "$ref": "#/definitions/ExtendedAttributes"
-          },
+		  },
+		  "subscriptionList": {
+			"type": "object",
+			"title": "Subscription List (Object)",
+			"description": "The subscription list id and supplier id for this item as specified in channel settings",
+			"properties": {
+				"listId": {
+					"type": "string",
+					"title": "Subscription List Id (GUID)"
+				},
+				"entityId": {
+					"type": "integer",
+					"title": "Entity Id (Integer)"
+				}
+			}
+		  },
           "ProductDetails": {
-            "$ref": "#/definitions/Product"
+            "$ref": "#/definitions/ProductDetails"
           },
           "Pricing": {
             "$ref": "#/definitions/Pricing"
@@ -90,35 +102,32 @@
           }
         }
       },
-      "ExtendedAttributes": {
-        "type": "array",
-        "title": "ExtendedAttributes (Array[Attribute])",
-        "description": "Extended attributes are unvalidated extra properties that can be put on a CatalogItem",
-        "items": {
-          "type": "object",
-          "title": "Attribute",
-          "description": "Attribute",
-          "properties": {
-            "Id": {
-              "type": "string",
-              "title": "Name (String(250))",
-              "description": "Attribute name"
-            },
-            "Name": {
-              "type": "string",
-              "title": "Value (String(250))",
-              "description": "Attribute value"
-            }
-          }
-        }
-      },
-      "Product": {
+      "ProductDetails": {
         "type": "object",
         "title": "Product (Object)",
         "description": "Product details",
         "properties": {
           "ExtendedAttributes": {
-            "$ref": "#/definitions/ExtendedAttributes"
+            "type": "array",
+            "title": "ExtendedAttributes (Array[Attribute])",
+            "description": "Extended attributes are unvalidated extra properties that can be put on a CatalogItem",
+            "items": {
+              "type": "object",
+              "title": "Attribute",
+              "description": "Attribute",
+              "properties": {
+                "Id": {
+                  "type": "string",
+                  "title": "Name (String(250))",
+                  "description": "Attribute name"
+                },
+                "Name": {
+                  "type": "string",
+                  "title": "Value (String(250))",
+                  "description": "Attribute value"
+                }
+              }
+            }
           },
           "DateAddedUtc": {
             "type": "string",
