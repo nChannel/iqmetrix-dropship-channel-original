@@ -76,5 +76,17 @@
   },
   "UpdateSalesOrder": {
     "statusCodes": [200, 400, 429, 500]
+  },
+  "GetProductSimpleFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
+  },
+  "GetProductMatrixFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
+  },
+  "GetProductPricingFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
+  },
+  "GetProductQuantityFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
   }
 }
