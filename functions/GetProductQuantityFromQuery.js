@@ -1,7 +1,5 @@
 const stubName = "GetProductQuantityFromQuery";
 const nc = require("./util/ncUtils");
-const validationMessages = [];
-const out = { ncStatusCode: null, response: {}, payload: {} };
 const baseRequest = require("request-promise-native");
 let request,
   access_token,
@@ -11,7 +9,9 @@ let request,
   subscriptionLists,
   startDateGMT,
   endDateGMT,
-  productQuantityBusinessReferences;
+  productQuantityBusinessReferences,
+  validationMessages,
+  out;
 
 /**
  * The GetProductQuantityFromQuery function will retrieve available quantity from iQmetrix APIs.
@@ -27,6 +27,7 @@ let request,
  */
 function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payload, callback) {
   logInfo(`Beginning ${stubName}...`);
+  validateCallback(callback);
 
   validateArguments(...arguments)
     .then(getProductLists)
@@ -38,7 +39,9 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
     .then(buildResponseObject)
     .catch(error => {
       logError(`An error occurred during ${stubName}: ${error}`);
-      out.ncStatusCode = error.statusCode ? error.statusCode : 500;
+      if (!out.ncStatusCode) {
+        out.ncStatusCode = error.statusCode ? error.statusCode : 500;
+      }
       out.payload.error = error;
       return out;
     })
@@ -244,12 +247,15 @@ async function buildResponseObject(products) {
  * @param {object} payload
  * @param {function} callback
  */
-async function validateArguments(ncUtil, channelProfile, flowContext, payload, callback) {
+async function validateArguments(ncUtil, channelProfile, flowContext, payload) {
   logInfo("Validating arguments...");
-  validateCallback(callback);
+
+  validationMessages = [];
+  out = { ncStatusCode: null, response: {}, payload: {} };
+
   validateNcUtil(ncUtil);
   validateChannelProfile(channelProfile);
-  validateFlowContext(flowContext);
+  //validateFlowContext(flowContext);
   validatePayload(payload);
 
   if (validationMessages.length > 0) {
