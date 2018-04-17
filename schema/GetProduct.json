@@ -63,7 +63,7 @@
             "items": {
               "type": "string",
               "title": "SubscribableListId (GUID)",
-              "description": "Subscribable List identifer"
+              "description": "Subscribable List identifier"
             }
           },
           "DateAddedUtc": {
@@ -225,7 +225,7 @@
               "ParentCategories": {
                 "type": "array",
                 "title": "ParentCategories (Array[object])",
-                "descriptioin": "List of Parent Categories",
+                "description": "List of Parent Categories",
                 "items": {
                   "type": "object",
                   "title": "ParentCategory",
@@ -518,14 +518,14 @@
                     "type": "string",
                     "title": "ColorCode (String)",
                     "description":
-                      "If Type is ColorCode, a valid hex code for a color. Otherwise, this propety is ignored"
+                      "If Type is ColorCode, a valid hex code for a color. Otherwise, this property is ignored"
                   }
                 }
               },
               "IsUsed": {
                 "type": "boolean",
                 "title": "IsUsed (Boolean)",
-                "descriptioin": "Reserved for future use"
+                "description": "Reserved for future use"
               }
             }
           },
@@ -618,7 +618,7 @@
           "UpcCodes": {
             "type": "array",
             "title": "UpcCodes (Array[object])",
-            "descriptioin": "UPC codes",
+            "description": "UPC codes",
             "items": {
               "type": "object",
               "properties": {
