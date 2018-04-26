@@ -1699,7 +1699,7 @@
           "ncStatusCode": 200,
           "payload": {
             "doc": {
-              "BillingCustomer": {}
+              "Customer": {}
             }
           },
           "baseUri": "https://localhost",
