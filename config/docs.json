@@ -2661,7 +2661,8 @@
               "StreetAddress2": "Suite 500",
               "Version": 1,
               "AttentionTo": "Princess"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2721,7 +2722,8 @@
               "StateCode": "AB",
               "StreetAddress1": "1600 Amphitheatre Pkwy",
               "StreetAddress2": "Suite 500"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2764,7 +2766,8 @@
               "StateCode": "AB",
               "StreetAddress1": "1600 Amphitheatre Pkwy",
               "StreetAddress2": "Suite 500"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2807,7 +2810,8 @@
               "StateCode": "AB",
               "StreetAddress1": "1600 Amphitheatre Pkwy",
               "StreetAddress2": "Suite 500"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2847,7 +2851,8 @@
               "DoNotContact": true,
               "Notes": "After 6pm",
               "Value": "(306) 222-3333"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2891,7 +2896,8 @@
               "DoNotContact": true,
               "Notes": "After 6pm",
               "Value": "(306) 222-3333"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2923,7 +2929,8 @@
               "DoNotContact": true,
               "Notes": "After 6pm",
               "Value": "(306) 222-3333"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -2955,7 +2962,8 @@
               "DoNotContact": true,
               "Notes": "After 6pm",
               "Value": "(306) 222-3333"
-            }
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
@@ -3342,38 +3350,78 @@
         {
           "ncStatusCode": 200,
           "payload": {
-            "doc": {}
+            "doc": {
+              "PrimaryName": "Princess",
+              "MiddleName": "Ella",
+              "FamilyName": "Jasmine",
+              "AlternateName": "Jas",
+              "CustomerTypeId": 3,
+              "DateOfBirth": "1952-07-23T12:00:00.000",
+              "Disabled": false,
+              "DoNotContact": true,
+              "Notes": "Interested in iPhone 6",
+              "Title": "Ms",
+              "ncEmail": "bob@ncmail.com"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 200,
               "responsePayload": {
-                "customer": {
-                  "id": 1073339459,
-                  "email": "derek.boytim@nchannel.com"
-                }
+                "Id": "659c2a38-d083-4421-9330-46d779702f85",
+                "PrimaryName": "Princess",
+                "MiddleName": "Ella",
+                "FamilyName": "Jasmine",
+                "AlternateName": "Jas",
+                "Title": "Ms",
+                "CustomerType": "Company",
+                "CustomerTypeId": 3,
+                "DateOfBirth": "1952-07-23T12:00:00.000",
+                "PricingGroupId": null,
+                "Disabled": false,
+                "DoNotContact": true,
+                "Notes": "Interested in iPhone 6",
+                "Version": 1,
+                "MergedIntoCustomerId": null,
+                "ncEmail": "bob@ncmail.com"
               }
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": ["email"]
+            "customerBusinessReferences": [
+              "ncEmail"
+            ]
           }
         },
         {
           "ncStatusCode": 400,
           "payload": {
-            "doc": {}
+            "doc": {
+              "PrimaryName": "Princess",
+              "MiddleName": "Ella",
+              "FamilyName": "Jasmine",
+              "AlternateName": "Jas",
+              "CustomerTypeId": 3,
+              "DateOfBirth": "1952-07-23T12:00:00.000",
+              "Disabled": true,
+              "DoNotContact": true,
+              "Notes": "Interested in iPhone 6",
+              "Title": "Ms",
+              "ncEmail": "bob@ncmail.com"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 400,
@@ -3381,19 +3429,34 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": ["email"]
+            "customerBusinessReferences": [
+              "ncEmail"
+            ]
           }
         },
         {
           "ncStatusCode": 429,
           "payload": {
-            "doc": {}
+            "doc": {
+              "PrimaryName": "Princess",
+              "MiddleName": "Ella",
+              "FamilyName": "Jasmine",
+              "AlternateName": "Jas",
+              "CustomerTypeId": 3,
+              "DateOfBirth": "1952-07-23T12:00:00.000",
+              "Disabled": true,
+              "DoNotContact": true,
+              "Notes": "Interested in iPhone 6",
+              "Title": "Ms",
+              "ncEmail": "bob@ncmail.com"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 429,
@@ -3401,19 +3464,34 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": ["email"]
+            "customerBusinessReferences": [
+              "ncEmail"
+            ]
           }
         },
         {
           "ncStatusCode": 500,
           "payload": {
-            "doc": {}
+            "doc": {
+              "PrimaryName": "Princess",
+              "MiddleName": "Ella",
+              "FamilyName": "Jasmine",
+              "AlternateName": "Jas",
+              "CustomerTypeId": 3,
+              "DateOfBirth": "1952-07-23T12:00:00.000",
+              "Disabled": true,
+              "DoNotContact": true,
+              "Notes": "Interested in iPhone 6",
+              "Title": "Ms",
+              "ncEmail": "bob@ncmail.com"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 500,
@@ -3421,7 +3499,369 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": ["email"]
+            "customerBusinessReferences": [
+              "ncEmail"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "functionName": "UpdateCustomerAddress",
+      "tests": [
+        {
+          "ncStatusCode": 200,
+          "payload": {
+            "doc": {
+              "Id": "a08b0640-606a-41f0-901a-facaf50e75dd",
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "AddressType": "Home",
+              "AddressTypeId": 2,
+              "Country": "Canada",
+              "CountryCode": "CA",
+              "Default": false,
+              "DoNotContact": true,
+              "Email": "Jas@princess.ca",
+              "Locality": "Mountain View",
+              "Notes": "Moved as of April 15 2015",
+              "Phone": "(555) 555-5555",
+              "PostalCode": "94043",
+              "PostOfficeBoxNumber": "P.O. Box 1022",
+              "State": "Alberta",
+              "StateCode": "AB",
+              "StreetAddress1": "1600 Amphitheatre Pkwy",
+              "StreetAddress2": "Suite 500",
+              "Version": 1,
+              "AttentionTo": "Princess"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 200,
+              "responsePayload": {
+                "Id": "aaaaaaaa",
+                "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "AddressTypeId": 2,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              }
+            }
+          ],
+          "channelProfile": {
+            "customerAddressBusinessReferences": [
+              "StreetAddress1",
+              "StreetAddress2",
+              "Locality",
+              "StateCode",
+              "PostalCode",
+              "CountryCode"
+            ]
+          }
+        },
+        {
+          "ncStatusCode": 400,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "AddressTypeId": 2,
+              "AttentionTo": "Princess",
+              "CountryCode": "CA",
+              "Default": false,
+              "DoNotContact": true,
+              "Email": "Jas@princess.ca",
+              "Locality": "Mountain View",
+              "Notes": "Moved as of April 15 2015",
+              "Phone": "(555) 555-5555",
+              "PostalCode": "94043",
+              "PostOfficeBoxNumber": "P.O. Box 1022",
+              "StateCode": "AB",
+              "StreetAddress1": "1600 Amphitheatre Pkwy",
+              "StreetAddress2": "Suite 500"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 400,
+              "responsePayload": {}
+            }
+          ],
+          "channelProfile": {
+            "customerAddressBusinessReferences": [
+              "StreetAddress1",
+              "StreetAddress2",
+              "Locality",
+              "StateCode",
+              "PostalCode",
+              "CountryCode"
+            ]
+          }
+        },
+        {
+          "ncStatusCode": 429,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "AddressTypeId": 2,
+              "AttentionTo": "Princess",
+              "CountryCode": "CA",
+              "Default": false,
+              "DoNotContact": true,
+              "Email": "Jas@princess.ca",
+              "Locality": "Mountain View",
+              "Notes": "Moved as of April 15 2015",
+              "Phone": "(555) 555-5555",
+              "PostalCode": "94043",
+              "PostOfficeBoxNumber": "P.O. Box 1022",
+              "StateCode": "AB",
+              "StreetAddress1": "1600 Amphitheatre Pkwy",
+              "StreetAddress2": "Suite 500"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 429,
+              "responsePayload": {}
+            }
+          ],
+          "channelProfile": {
+            "customerAddressBusinessReferences": [
+              "StreetAddress1",
+              "StreetAddress2",
+              "Locality",
+              "StateCode",
+              "PostalCode",
+              "CountryCode"
+            ]
+          }
+        },
+        {
+          "ncStatusCode": 500,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "AddressTypeId": 2,
+              "AttentionTo": "Princess",
+              "CountryCode": "CA",
+              "Default": false,
+              "DoNotContact": true,
+              "Email": "Jas@princess.ca",
+              "Locality": "Mountain View",
+              "Notes": "Moved as of April 15 2015",
+              "Phone": "(555) 555-5555",
+              "PostalCode": "94043",
+              "PostOfficeBoxNumber": "P.O. Box 1022",
+              "StateCode": "AB",
+              "StreetAddress1": "1600 Amphitheatre Pkwy",
+              "StreetAddress2": "Suite 500"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 500,
+              "responsePayload": {}
+            }
+          ],
+          "channelProfile": {
+            "customerAddressBusinessReferences": [
+              "StreetAddress1",
+              "StreetAddress2",
+              "Locality",
+              "StateCode",
+              "PostalCode",
+              "CountryCode"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "functionName": "UpdateCustomerContact",
+      "tests": [
+        {
+          "ncStatusCode": 200,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "ContactMethodCategoryId": 1,
+              "ContactMethodTypeId": 2,
+              "Default": true,
+              "DoNotContact": true,
+              "Notes": "After 6pm",
+              "Value": "(306) 222-3333"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerContactRemoteID": "b25dd8b2-a24d-4107-8fbe-9c7b21e18137"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 200,
+              "responsePayload": {
+                "Id": "b25dd8b2-a24d-4107-8fbe-9c7b21e18137",
+                "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "ContactMethodCategory": "Phone",
+                "ContactMethodCategoryId": 1,
+                "ContactMethodType": "Work",
+                "ContactMethodTypeId": 2,
+                "Default": true,
+                "DoNotContact": true,
+                "Notes": "After 6pm",
+                "Value": "(306) 222-3333",
+                "Version": 1
+              }
+            }
+          ],
+          "channelProfile": {
+            "customerContactBusinessReferences": [
+              "ContactMethodCategoryId",
+              "ContactMethodTypeId",
+              "Value"
+            ]
+          }
+        },
+        {
+          "ncStatusCode": 400,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "ContactMethodCategoryId": 1,
+              "ContactMethodTypeId": 3,
+              "Default": true,
+              "DoNotContact": true,
+              "Notes": "After 6pm",
+              "Value": "(306) 222-3333"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerContactRemoteID": "b25dd8b2-a24d-4107-8fbe-9c7b21e18137"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 400,
+              "responsePayload": {}
+            }
+          ],
+          "channelProfile": {
+            "customerContactBusinessReferences": [
+              "ContactMethodCategoryId",
+              "ContactMethodTypeId",
+              "Value"
+            ]
+          }
+        },
+        {
+          "ncStatusCode": 429,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "ContactMethodCategoryId": 1,
+              "ContactMethodTypeId": 3,
+              "Default": true,
+              "DoNotContact": true,
+              "Notes": "After 6pm",
+              "Value": "(306) 222-3333"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerContactRemoteID": "b25dd8b2-a24d-4107-8fbe-9c7b21e18137"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 429,
+              "responsePayload": {}
+            }
+          ],
+          "channelProfile": {
+            "customerContactBusinessReferences": [
+              "ContactMethodCategoryId",
+              "ContactMethodTypeId",
+              "Value"
+            ]
+          }
+        },
+        {
+          "ncStatusCode": 500,
+          "payload": {
+            "doc": {
+              "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+              "ContactMethodCategoryId": 1,
+              "ContactMethodTypeId": 3,
+              "Default": true,
+              "DoNotContact": true,
+              "Notes": "After 6pm",
+              "Value": "(306) 222-3333"
+            },
+            "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "customerContactRemoteID": "b25dd8b2-a24d-4107-8fbe-9c7b21e18137"
+          },
+          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "defaultHeaders": {},
+          "links": [
+            {
+              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "method": "PUT",
+              "replyHeaders": {},
+              "statusCode": 500,
+              "responsePayload": {}
+            }
+          ],
+          "channelProfile": {
+            "customerContactBusinessReferences": [
+              "ContactMethodCategoryId",
+              "ContactMethodTypeId",
+              "Value"
+            ]
           }
         }
       ]
