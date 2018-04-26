@@ -2,6 +2,12 @@
   "CheckForCustomer": {
     "statusCodes": [200, 204, 409, 400, 429, 500]
   },
+  "CheckForCustomerAddress": {
+    "statusCodes": [200, 204, 409, 400, 429, 500]
+  },
+  "CheckForCustomerContact": {
+    "statusCodes": [200, 204, 409, 400, 429, 500]
+  },
   "CheckForProduct": {
     "statusCodes": [200, 204, 409, 400, 429, 500]
   },
