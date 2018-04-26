@@ -56,6 +56,12 @@
   "InsertCustomer": {
     "statusCodes": [201, 400, 429, 500]
   },
+  "InsertCustomerAddress": {
+    "statusCodes": [201, 400, 429, 500]
+  },
+  "InsertCustomerContact": {
+    "statusCodes": [201, 400, 429, 500]
+  },
   "InsertFulfillment": {
     "statusCodes": [201, 400, 429, 500]
   },
@@ -75,6 +81,12 @@
     "statusCodes": [200, 400, 429, 500]
   },
   "UpdateCustomer": {
+    "statusCodes": [200, 400, 429, 500]
+  },
+  "UpdateCustomerAddress": {
+    "statusCodes": [200, 400, 429, 500]
+  },
+  "UpdateCustomerContact": {
     "statusCodes": [200, 400, 429, 500]
   },
   "UpdateFulfillment": {
