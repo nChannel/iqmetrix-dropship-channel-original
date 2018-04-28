@@ -384,7 +384,7 @@
       },
       "documentDef": {
         "schema": {},
-        "referenceLocation": {"customerBusinessReferences": ["", ""]}
+        "referenceLocation": {"customerBusinessReferences": ["UniqueIdentifier"]}
       }
     },
     {
@@ -418,7 +418,7 @@
       },
       "documentDef": {
         "schema": {},
-        "referenceLocation": {"customerBusinessReferences": ["", ""]}
+        "referenceLocation": {"customerBusinessReferences": ["UniqueIdentifier"]}
       }
     },
     {

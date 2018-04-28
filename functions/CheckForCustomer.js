@@ -3,6 +3,7 @@ const nc = require("./util/ncUtils");
 
 function CheckForCustomer(ncUtil, channelProfile, flowContext, payload, callback) {
     const stub = new nc.Stub("CheckForCustomer", ...arguments);
+    const responseCodes = [200, 204, 409, 400, 429, 500];
 
     nc.logInfo(`Beginning ${stub.name}...`);
     nc.validateCallback(callback);
@@ -13,7 +14,7 @@ function CheckForCustomer(ncUtil, channelProfile, flowContext, payload, callback
             nc.logError(error);
 
             if (error.name === "StatusCodeError") {
-                stub.out.ncStatusCode = error.statusCode;
+                stub.out.ncStatusCode = responseCodes.includes(error.statusCode) ? error.statusCode : 400;
                 stub.out.response.endpointStatusCode = error.statusCode;
                 stub.out.response.endpointStatusMessage = error.message;
             } else {
@@ -35,16 +36,18 @@ function CheckForCustomer(ncUtil, channelProfile, flowContext, payload, callback
 async function searchCustomer(stub) {
     nc.logInfo("Searching for customer...");
 
-    const criteria = nc
-        .extractBusinessReferences(stub.channelProfile.customerBusinessReferences, stub.payload.doc, null)
-        .map(value => `Criteria eq '${value}'`);
+    const criteria = [];
+    stub.channelProfile.customerBusinessReferences.forEach(refName => {
+        const refValue = nc.extractBusinessReferences([refName], stub.payload.doc);
+        criteria.push(`${refName} eq '${refValue}'`);
+    });
 
     const response = await stub.request.get({
         url: `${stub.channelProfile.channelSettingsValues.protocol}://crm${
             stub.channelProfile.channelSettingsValues.environment
         }.iqmetrix.net/v1/Companies(${
             stub.channelProfile.channelAuthValues.company_id
-        })/CustomerSearch?$filter=${criteria.join(" and ")}`
+        })/Customers?$filter=${criteria.join(" and ")}`
     });
 
     const customers = response.body;
@@ -69,7 +72,9 @@ async function searchCustomer(stub) {
         nc.logInfo("Customer does not exist.");
         stub.out.ncStatusCode = 204;
     } else {
-        stub.out.payload.error = new Error(`Search returned multiple customers. Response: ${JSON.stringify(customers, null, 2)}`);
+        stub.out.payload.error = new Error(
+            `Search returned multiple customers. Response: ${JSON.stringify(customers, null, 2)}`
+        );
         stub.out.ncStatusCode = 409;
     }
 
@@ -85,7 +90,7 @@ async function validateArguments(stub) {
     validationMessages.push(...validatePayload(stub.payload));
 
     if (validationMessages.length > 0) {
-        validationMessages.forEach(msg => logError(msg));
+        validationMessages.forEach(msg => nc.logError(msg));
         stub.out.ncStatusCode = 400;
         throw new Error(`Invalid request [${validationMessages.join(" ")}]`);
     }
@@ -104,7 +109,7 @@ async function validateArguments(stub) {
 
 function validateNcUtil(ncUtil) {
     const messages = [];
-    if (!isObject(ncUtil)) {
+    if (!nc.isObject(ncUtil)) {
         messages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
     }
     return messages;

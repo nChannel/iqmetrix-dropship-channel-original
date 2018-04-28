@@ -38,14 +38,14 @@
               "MiddleName": "Lee",
               "FamilyName": "Smith",
               "AlternateName": "Bob",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
-          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "baseUri": "https://crmdemo.iqmetrix.net",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(28313)/CustomerSearch?$filter=Criteria eq 'bob@ncmail.com'",
+              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -120,7 +120,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -132,14 +132,14 @@
               "MiddleName": "Lee",
               "FamilyName": "Smith",
               "AlternateName": "Bob",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
-          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "baseUri": "https://crmdemo.iqmetrix.net",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(28313)/CustomerSearch?$filter=Criteria eq 'bob@ncmail.com'",
+              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -148,7 +148,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -160,14 +160,14 @@
               "MiddleName": "Lee",
               "FamilyName": "Smith",
               "AlternateName": "Bob",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
-          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "baseUri": "https://crmdemo.iqmetrix.net",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(28313)/CustomerSearch?$filter=Criteria eq 'bob@ncmail.com'",
+              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -307,7 +307,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -319,14 +319,14 @@
               "MiddleName": "Lee",
               "FamilyName": "Smith",
               "AlternateName": "Bob",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
-          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "baseUri": "https://crmdemo.iqmetrix.net",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(28313)/CustomerSearch?$filter=Criteria eq 'bob@ncmail.com'",
+              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 400,
@@ -335,7 +335,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -347,14 +347,14 @@
               "MiddleName": "Lee",
               "FamilyName": "Smith",
               "AlternateName": "Bob",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
-          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "baseUri": "https://crmdemo.iqmetrix.net",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(28313)/CustomerSearch?$filter=Criteria eq 'bob@ncmail.com'",
+              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 429,
@@ -363,7 +363,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -375,14 +375,14 @@
               "MiddleName": "Lee",
               "FamilyName": "Smith",
               "AlternateName": "Bob",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
-          "baseUri": "https://crmdemo.iqmetrix.net/v1",
+          "baseUri": "https://crmdemo.iqmetrix.net",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(28313)/CustomerSearch?$filter=Criteria eq 'bob@ncmail.com'",
+              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 500,
@@ -391,7 +391,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         }
@@ -789,10 +789,10 @@
           "payload": {
             "doc": {
               "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
-              "ContactMethodCategory": "Phone",
+              "ContactMethodCategory": "Email",
               "ContactMethodCategoryId": 1,
-              "ContactMethodType": "Work",
-              "ContactMethodTypeId": 2,
+              "ContactMethodType": "Work phone",
+              "ContactMethodTypeId": 5,
               "Default": true,
               "DoNotContact": true,
               "Notes": "After 6pm",
@@ -889,10 +889,10 @@
           "payload": {
             "doc": {
               "CustomerId": "659c2a38-d083-4421-9330-46d779702f85",
-              "ContactMethodCategory": "Phone",
+              "ContactMethodCategory": "Email",
               "ContactMethodCategoryId": 1,
-              "ContactMethodType": "Work",
-              "ContactMethodTypeId": 2,
+              "ContactMethodType": "Work phone",
+              "ContactMethodTypeId": 5,
               "Default": true,
               "DoNotContact": true,
               "Notes": "After 6pm",
@@ -1668,7 +1668,9 @@
           "ncStatusCode": 200,
           "payload": {
             "doc": {
-              "BillingAddress": {}
+              "BillingAddress": {
+                "AddressType": "Home"
+              }
             }
           },
           "baseUri": "https://localhost",
@@ -1699,7 +1701,9 @@
           "ncStatusCode": 200,
           "payload": {
             "doc": {
-              "Customer": {}
+              "Customer": {
+                "CustomerType": "Person"
+              }
             }
           },
           "baseUri": "https://localhost",
@@ -1731,7 +1735,9 @@
           "payload": {
             "doc": {
               "Addresses": [
-                {}
+                {
+                  "AddressType": "Home"
+                }
               ]
             }
           },
@@ -1764,7 +1770,8 @@
           "payload": {
             "doc": {
               "ContactMethods": [
-                {}
+                {
+                  "ContactType": "Home"}
               ]
             }
           },
@@ -1844,7 +1851,9 @@
           "ncStatusCode": 200,
           "payload": {
             "doc": {
-              "ShippingAddress": {}
+              "ShippingAddress": {
+                "AddressType": "Home"
+              }
             }
           },
           "baseUri": "https://localhost",
@@ -2493,7 +2502,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
@@ -2520,13 +2529,13 @@
                 "Notes": "Interested in iPhone 6",
                 "Version": 1,
                 "MergedIntoCustomerId": null,
-                "ncEmail": "bob@ncmail.com"
+                "UniqueIdentifier": "bob@ncmail.com"
               }
             }
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -2544,7 +2553,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
@@ -2560,7 +2569,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -2578,7 +2587,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
@@ -2594,7 +2603,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -2612,7 +2621,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             }
           },
           "baseUri": "https://crmdemo.iqmetrix.net/v1",
@@ -2628,7 +2637,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         }
@@ -3361,7 +3370,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             },
             "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
@@ -3389,13 +3398,13 @@
                 "Notes": "Interested in iPhone 6",
                 "Version": 1,
                 "MergedIntoCustomerId": null,
-                "ncEmail": "bob@ncmail.com"
+                "UniqueIdentifier": "bob@ncmail.com"
               }
             }
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -3413,7 +3422,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             },
             "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
@@ -3430,7 +3439,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -3448,7 +3457,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             },
             "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
@@ -3465,7 +3474,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         },
@@ -3483,7 +3492,7 @@
               "DoNotContact": true,
               "Notes": "Interested in iPhone 6",
               "Title": "Ms",
-              "ncEmail": "bob@ncmail.com"
+              "UniqueIdentifier": "bob@ncmail.com"
             },
             "customerRemoteID": "659c2a38-d083-4421-9330-46d779702f85"
           },
@@ -3500,7 +3509,7 @@
           ],
           "channelProfile": {
             "customerBusinessReferences": [
-              "ncEmail"
+              "UniqueIdentifier"
             ]
           }
         }

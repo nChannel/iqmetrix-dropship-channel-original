@@ -52,7 +52,7 @@ async function validateArguments(stub) {
     validationMessages.push(...validatePayload(stub.payload));
 
     if (validationMessages.length > 0) {
-        validationMessages.forEach(msg => logError(msg));
+        validationMessages.forEach(msg => nc.logError(msg));
         stub.out.ncStatusCode = 400;
         throw new Error(`Invalid request [${validationMessages.join(" ")}]`);
     }
@@ -62,7 +62,7 @@ async function validateArguments(stub) {
 
 function validateNcUtil(ncUtil) {
     const messages = [];
-    if (!isObject(ncUtil)) {
+    if (!nc.isObject(ncUtil)) {
         messages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
     }
     return messages;
@@ -87,6 +87,11 @@ function validateChannelProfile(channelProfile) {
     } else {
         messages.push(...validateChannelSettingsValues(channelProfile.channelSettingsValues));
         messages.push(...validateChannelAuthValues(channelProfile.channelAuthValues));
+        if (!nc.isNonEmptyArray(channelProfile.customerBusinessReferences)) {
+            messages.push(`The channelProfile.customerBusinessReferences array is ${
+                channelProfile.customerBusinessReferences == null ? "missing" : "invalid"
+                }.`);
+        }
     }
     return messages;
 }
@@ -96,6 +101,18 @@ function validateChannelSettingsValues(channelSettingsValues) {
     if (!nc.isObject(channelSettingsValues)) {
         messages.push(`The channelSettingsValues object is ${channelSettingsValues == null ? "missing" : "invalid"}.`);
     }
+    else {
+        if (!nc.isNonEmptyString(channelSettingsValues.protocol)) {
+            messages.push(`The channelSettingsValues.protocol string is ${
+                channelSettingsValues.protocol == null ? "missing" : "invalid"
+                }.`);
+        }
+        if (!nc.isString(channelSettingsValues.environment)) {
+            messages.push(`The channelSettingsValues.environment string is ${
+                channelSettingsValues.environment == null ? "missing" : "invalid"
+                }.`);
+        }
+    }
 
     return messages;
 }
@@ -104,6 +121,18 @@ function validateChannelAuthValues(channelAuthValues) {
     const messages = [];
     if (!nc.isObject(channelAuthValues)) {
         messages.push(`The channelAuthValues object is ${channelAuthValues == null ? "missing" : "invalid"}.`);
+    }
+    else {
+        if (!nc.isNonEmptyString(channelAuthValues.company_id)) {
+            messages.push(`The channelAuthValues.company_id string is ${
+                channelAuthValues.company_id == null ? "missing" : "invalid"
+                }.`);
+        }
+        if (!nc.isNonEmptyString(channelAuthValues.access_token)) {
+            messages.push(`The channelAuthValues.access_token string is ${
+                channelAuthValues.access_token == null ? "missing" : "invalid"
+                }.`);
+        }
     }
 
     return messages;

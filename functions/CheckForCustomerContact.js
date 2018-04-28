@@ -3,6 +3,7 @@ const nc = require("./util/ncUtils");
 
 function CheckForCustomerContact(ncUtil, channelProfile, flowContext, payload, callback) {
     const stub = new nc.Stub("CheckForCustomerContact", ...arguments);
+    const responseCodes = [200, 204, 409, 400, 429, 500];
 
     nc.logInfo(`Beginning ${stub.name}...`);
     nc.validateCallback(callback);
@@ -13,7 +14,7 @@ function CheckForCustomerContact(ncUtil, channelProfile, flowContext, payload, c
             nc.logError(error);
 
             if (error.name === "StatusCodeError") {
-                stub.out.ncStatusCode = error.statusCode;
+                stub.out.ncStatusCode = responseCodes.includes(error.statusCode) ? error.statusCode : 400;
                 stub.out.response.endpointStatusCode = error.statusCode;
                 stub.out.response.endpointStatusMessage = error.message;
             } else {
@@ -86,6 +87,8 @@ async function searchCustomerContactMethod(stub) {
         );
         stub.out.ncStatusCode = 409;
     }
+    
+    return stub.out;
 }
 
 async function validateArguments(stub) {
@@ -97,7 +100,7 @@ async function validateArguments(stub) {
     validationMessages.push(...validatePayload(stub.payload));
 
     if (validationMessages.length > 0) {
-        validationMessages.forEach(msg => logError(msg));
+        validationMessages.forEach(msg => nc.logError(msg));
         stub.out.ncStatusCode = 400;
         throw new Error(`Invalid request [${validationMessages.join(" ")}]`);
     }
@@ -116,7 +119,7 @@ async function validateArguments(stub) {
 
 function validateNcUtil(ncUtil) {
     const messages = [];
-    if (!isObject(ncUtil)) {
+    if (!nc.isObject(ncUtil)) {
         messages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
     }
     return messages;

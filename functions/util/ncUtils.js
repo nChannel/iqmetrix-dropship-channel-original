@@ -1,9 +1,12 @@
-function Stub(name, ncUtil, channelProfile, flowContext, payload) {
+let stubName;
+function Stub(name, ncUtil, channelProfile, flowContext, payload, callback) {
     this.name = name;
+    stubName = name;
     this.ncUtil = ncUtil;
     this.channelProfile = channelProfile;
     this.flowContext = flowContext;
     this.payload = payload;
+    this.callback = callback;
     this.out = {
         ncStatusCode: null,
         response: {},
@@ -84,7 +87,7 @@ function logError(msg) {
     log(msg, "error");
 }
 
-function log(msg, level = "info", stubName) {
+function log(msg, level = "info") {
     if (isNonEmptyString(stubName)) {
         msg = `${stubName}: ${msg}`;
     }

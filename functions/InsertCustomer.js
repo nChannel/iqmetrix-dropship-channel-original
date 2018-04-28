@@ -3,6 +3,7 @@ const nc = require("./util/ncUtils");
 
 function InsertCustomer(ncUtil, channelProfile, flowContext, payload, callback) {
     const stub = new nc.Stub("InsertCustomer", ...arguments);
+    const responseCodes = [201, 400, 429, 500];
 
     nc.logInfo(`Beginning ${stub.name}...`);
     nc.validateCallback(callback);
@@ -13,7 +14,7 @@ function InsertCustomer(ncUtil, channelProfile, flowContext, payload, callback) 
             nc.logError(error);
 
             if (error.name === "StatusCodeError") {
-                stub.out.ncStatusCode = error.statusCode;
+                stub.out.ncStatusCode = responseCodes.includes(error.statusCode) ? error.statusCode : 400;
                 stub.out.response.endpointStatusCode = error.statusCode;
                 stub.out.response.endpointStatusMessage = error.message;
             } else {
@@ -44,8 +45,9 @@ async function postCustomer(stub) {
 
     const customer = response.body;
     stub.out.response.endpointStatusCode = response.statusCode;
-    out.payload.customerRemoteID = customer.Id;
-    out.payload.customerBusinessReference = nc.extractBusinessReferences(
+    stub.out.ncStatusCode = response.statusCode;
+    stub.out.payload.customerRemoteID = customer.Id;
+    stub.out.payload.customerBusinessReference = nc.extractBusinessReferences(
         stub.channelProfile.customerBusinessReferences,
         customer
     );
@@ -62,7 +64,7 @@ async function validateArguments(stub) {
     validationMessages.push(...validatePayload(stub.payload));
 
     if (validationMessages.length > 0) {
-        validationMessages.forEach(msg => logError(msg));
+        validationMessages.forEach(msg => nc.logError(msg));
         stub.out.ncStatusCode = 400;
         throw new Error(`Invalid request [${validationMessages.join(" ")}]`);
     }
@@ -81,7 +83,7 @@ async function validateArguments(stub) {
 
 function validateNcUtil(ncUtil) {
     const messages = [];
-    if (!isObject(ncUtil)) {
+    if (!nc.isObject(ncUtil)) {
         messages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
     }
     return messages;
