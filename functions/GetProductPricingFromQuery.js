@@ -122,7 +122,7 @@ async function getProductDetails(productList) {
 }
 
 /**
- * POST list of catalog ids to iQmetrix api and recieve array of product details
+ * POST list of catalog ids to iQmetrix api and receive array of product details
  *
  * @param {array} catalogIds
  * @returns product details
@@ -247,7 +247,6 @@ async function buildResponseObject(products) {
  * @param {object} channelProfile
  * @param {object} flowContext
  * @param {object} payload
- * @param {function} callback
  */
 async function validateArguments(ncUtil, channelProfile, flowContext, payload) {
   logInfo("Validating arguments...");
