@@ -214,7 +214,6 @@ let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, pay
             log("Do GetFulfillmentFromQuery Callback", ncUtil);
             out.response.endpointStatusCode = response.statusCode;
             out.response.endpointStatusMessage = response.statusMessage;
-            console.log(JSON.stringify(body));
 
             if (response.statusCode === 200 && body.rows.length > 0) {
               if (body.rows.length < body.totalRecords) {
