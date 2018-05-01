@@ -1,6 +1,5 @@
 'use strict'
-let jsonata = require('jsonata');
-const nc = require("../util/ncUtils");
+const nc = require("./util/ncUtils");
 
 let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, payload, callback) {
 
@@ -18,9 +17,6 @@ let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, pay
   if (!ncUtil) {
     invalid = true;
     invalidMsg = "ncUtil was not provided"
-  } else if (!ncUtil.request) {
-    invalid = true;
-    invalidMsg = "ncUtil.request was not provided"
   }
 
   //If channelProfile does not contain channelSettingsValues, channelAuthValues or fulfillmentBusinessReferences, the request can't be sent
@@ -33,9 +29,9 @@ let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, pay
   } else if (!channelProfile.channelSettingsValues.protocol) {
     invalid = true;
     invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided"
-  } else if (!channelProfile.channelSettingsValues.api_uri) {
+  } else if (!channelProfile.channelSettingsValues.environment) {
     invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues.api_uri was not provided"
+    invalidMsg = "channelProfile.channelSettingsValues.environment was not provided"
   } else if (!channelProfile.channelAuthValues) {
     invalid = true;
     invalidMsg = "channelProfile.channelAuthValues was not provided"
@@ -108,9 +104,9 @@ let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, pay
   }
 
   if (!invalid) {
-    let request = ncUtil.request;
+    let request = require('request');
 
-    let url = channelProfile.channelSettingsValues.protocol + "://ordermanagementreporting" + channelProfile.channelSettingsValues.api_uri;
+    let url = `${channelProfile.channelSettingsValues.protocol}://ordermanagementreporting${channelProfile.channelSettingsValues.environment}.iqmetrix.net`
 
     /*
      Create query string for searching orders by specific fields
@@ -211,6 +207,7 @@ let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, pay
       request(options, async function (error, response, body) {
         try {
           if (!error) {
+            console.log(body);
             log("Do GetFulfillmentFromQuery Callback", ncUtil);
             out.response.endpointStatusCode = response.statusCode;
             out.response.endpointStatusMessage = response.statusMessage;
@@ -229,7 +226,7 @@ let GetFulfillmentFromQuery = function (ncUtil, channelProfile, flowContext, pay
                 };
 
                 let endPoint = "/Companies(" + channelProfile.channelAuthValues.company_id + ")/OrderDetails(" + order._id + ")";
-                url = channelProfile.channelSettingsValues.protocol + "://ordermanagementreporting" + channelProfile.channelSettingsValues.api_uri + endPoint;
+                let url = `${channelProfile.channelSettingsValues.protocol}://ordermanagementreporting${channelProfile.channelSettingsValues.environment}.iqmetrix.net${endPoint}`;
                 options.url = url;
 
                 log("Using URL [" + url + "]", ncUtil);
