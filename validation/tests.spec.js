@@ -388,7 +388,6 @@ if (fs.existsSync('config/channel-settings.json')) {
                     break;
                 }
               }
-              console.log("activeMocks: " + nock.activeMocks());
               return fake;
             } else if (unitTest === 'soap') {
               let soap = require('soap');
@@ -493,7 +492,6 @@ if (fs.existsSync('config/channel-settings.json')) {
           function assertPackage(scope) {
             switch (docsFile.unitTestPackage.toLowerCase()) {
               case 'nock':
-                console.log("pendingMocks: " + scope.pendingMocks());
                 expect(scope.isDone()).to.be.true;
                 break;
               default:
