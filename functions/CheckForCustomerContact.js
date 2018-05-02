@@ -1,204 +1,122 @@
-const baseRequest = require("request-promise-native");
-const nc = require("./util/ncUtils");
-
 function CheckForCustomerContact(ncUtil, channelProfile, flowContext, payload, callback) {
-    const stub = new nc.Stub("CheckForCustomerContact", ...arguments);
-    const responseCodes = [200, 204, 409, 400, 429, 500];
+    const nc = require("./util/ncUtils");
+    const referenceLocations = ["customerContactBusinessReferences"];
+    const stub = new nc.Stub("CheckForCustomerContact", referenceLocations, ...arguments);
 
-    nc.logInfo(`Beginning ${stub.name}...`);
-    nc.validateCallback(callback);
-
-    validateArguments(stub)
-        .then(searchCustomerContactMethod)
+    validateFunction()
+        .then(searchForCustomerContact)
+        .then(buildResponse)
+        .catch(handleError)
+        .then(() => callback(stub.out))
         .catch(error => {
-            nc.logError(error);
-
-            if (error.name === "StatusCodeError") {
-                stub.out.ncStatusCode = responseCodes.includes(error.statusCode) ? error.statusCode : 400;
-                stub.out.response.endpointStatusCode = error.statusCode;
-                stub.out.response.endpointStatusMessage = error.message;
-            } else {
-                stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
-            }
-
-            stub.out.payload.error = error;
-
-            return stub.out;
-        })
-        .then(callback)
-        .catch(error => {
-            nc.logError("The callback function threw an exception:");
-            nc.logError(error);
-            throw error;
+            logError(`The callback function threw an exception: ${error}`);
+            setTimeout(() => {
+                throw error;
+            });
         });
-}
 
-async function searchCustomerContactMethod(stub) {
-    nc.logInfo("Searching for customer contact method...");
-
-    const response = await stub.request.get({
-        url: `${stub.channelProfile.channelSettingsValues.protocol}://crm${
-            stub.channelProfile.channelSettingsValues.environment
-        }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Customers(${
-            stub.payload.doc.CustomerId
-        })/ContactMethods`
-    });
-
-    const contactMethods = response.body;
-    stub.out.response.endpointStatusCode = response.statusCode;
-
-    if (!nc.isArray(contactMethods)) {
-        throw new TypeError(`Search response is not an array. Response: ${JSON.stringify(contactMethods, null, 2)}`);
-    }
-    if (contactMethods.length === 0) {
-        nc.logInfo("Customer does not have any existing contact methods.");
-        stub.out.ncStatusCode = 204;
+    function logInfo(msg) {
+        stub.log(msg, "info");
     }
 
-    const baseReference = nc.extractBusinessReferences(
-        stub.channelProfile.customerContactBusinessReferences,
-        stub.payload.doc
-    );
-    const matchingContactMethods = [];
-    contactMethods.forEach(contactMethod => {
-        const contactMethodReference = nc.extractBusinessReferences(
+    function logWarn(msg) {
+        stub.log(msg, "warn");
+    }
+
+    function logError(msg) {
+        stub.log(msg, "error");
+    }
+
+    async function validateFunction() {
+        if (stub.messages.length > 0) {
+            stub.messages.forEach(msg => logError(msg));
+            stub.out.ncStatusCode = 400;
+            throw new Error(`Invalid request [${stub.messages.join(" ")}]`);
+        }
+        logInfo("Function is valid.");
+    }
+
+    async function searchForCustomerContact() {
+        logInfo("Searching for existing customer contact...");
+
+        return await stub.request.get({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://crm${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Customers(${
+                stub.payload.doc.CustomerId
+            })/ContactMethods`
+        });
+    }
+
+    async function buildResponse(response) {
+        const contactMethods = response.body;
+        stub.out.response.endpointStatusCode = response.statusCode;
+
+        if (!nc.isArray(contactMethods)) {
+            throw new TypeError(
+                `Search response is not an array. Response: ${JSON.stringify(contactMethods, null, 2)}`
+            );
+        }
+        if (contactMethods.length === 0) {
+            logInfo("Customer does not have any existing contact methods.");
+            stub.out.ncStatusCode = 204;
+        }
+
+        const baseReference = nc.extractBusinessReferences(
             stub.channelProfile.customerContactBusinessReferences,
-            contactMethod
+            stub.payload.doc
         );
-        if (contactMethodReference === baseReference) {
-            matchingContactMethods.push(contactMethod);
-        }
-    });
-
-    if (matchingContactMethods.length === 1) {
-        nc.logInfo("Found a matching address.");
-        stub.out.ncStatusCode = 200;
-        stub.out.payload.customerAddressRemoteID = matchingContactMethods[0].Id;
-        stub.out.payload.customerAddressBusinessReference = nc.extractBusinessReferences(
-            stub.channelProfile.customerContactBusinessReferences,
-            matchingContactMethods[0]
-        );
-    } else if (matchingContactMethods.length === 0) {
-        nc.logInfo("No matching contact method found on customer.");
-        stub.out.ncStatusCode = 204;
-    } else {
-        stub.out.payload.error = new Error(
-            `Search returned multiple contact methods. Response: ${JSON.stringify(matchingContactMethods, null, 2)}`
-        );
-        stub.out.ncStatusCode = 409;
-    }
-    
-    return stub.out;
-}
-
-async function validateArguments(stub) {
-    nc.logInfo("Validating arguments...");
-    const validationMessages = [];
-
-    validationMessages.push(...validateNcUtil(stub.ncUtil));
-    validationMessages.push(...validateChannelProfile(stub.channelProfile));
-    validationMessages.push(...validatePayload(stub.payload));
-
-    if (validationMessages.length > 0) {
-        validationMessages.forEach(msg => nc.logError(msg));
-        stub.out.ncStatusCode = 400;
-        throw new Error(`Invalid request [${validationMessages.join(" ")}]`);
-    }
-
-    stub.request = baseRequest.defaults({
-        auth: {
-            bearer: stub.channelProfile.channelAuthValues.access_token
-        },
-        json: true,
-        gzip: true,
-        resolveWithFullResponse: true
-    });
-
-    return stub;
-}
-
-function validateNcUtil(ncUtil) {
-    const messages = [];
-    if (!nc.isObject(ncUtil)) {
-        messages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
-    }
-    return messages;
-}
-
-function validatePayload(payload) {
-    const messages = [];
-    if (!nc.isObject(payload)) {
-        messages.push(`The payload object is ${payload == null ? "missing" : "invalid"}.`);
-    } else {
-        if (!nc.isObject(payload.doc)) {
-            messages.push(`The payload.doc object is ${payload.doc == null ? "missing" : "invalid"}.`);
-        }
-    }
-    return messages;
-}
-
-function validateChannelProfile(channelProfile) {
-    const messages = [];
-    if (!nc.isObject(channelProfile)) {
-        messages.push(`The channelProfile object is ${channelProfile == null ? "missing" : "invalid"}.`);
-    } else {
-        messages.push(...validateChannelSettingsValues(channelProfile.channelSettingsValues));
-        messages.push(...validateChannelAuthValues(channelProfile.channelAuthValues));
-        if (!nc.isNonEmptyArray(channelProfile.customerContactBusinessReferences)) {
-            messages.push(
-                `The channelProfile.customerContactBusinessReferences array is ${
-                    channelProfile.customerContactBusinessReferences == null ? "missing" : "invalid"
-                }.`
+        const matchingContactMethods = [];
+        contactMethods.forEach(contactMethod => {
+            const contactMethodReference = nc.extractBusinessReferences(
+                stub.channelProfile.customerContactBusinessReferences,
+                contactMethod
             );
-        }
-    }
-    return messages;
-}
+            if (contactMethodReference === baseReference) {
+                matchingContactMethods.push(contactMethod);
+            }
+        });
 
-function validateChannelSettingsValues(channelSettingsValues) {
-    const messages = [];
-    if (!nc.isObject(channelSettingsValues)) {
-        messages.push(`The channelSettingsValues object is ${channelSettingsValues == null ? "missing" : "invalid"}.`);
-    } else {
-        if (!nc.isNonEmptyString(channelSettingsValues.protocol)) {
-            messages.push(
-                `The channelSettingsValues.protocol string is ${
-                    channelSettingsValues.protocol == null ? "missing" : "invalid"
-                }.`
+        if (matchingContactMethods.length === 1) {
+            logInfo("Found a matching contact method.");
+            stub.out.ncStatusCode = 200;
+            stub.out.payload.customerAddressRemoteID = matchingContactMethods[0].Id;
+            stub.out.payload.customerAddressBusinessReference = nc.extractBusinessReferences(
+                stub.channelProfile.customerContactBusinessReferences,
+                matchingContactMethods[0]
             );
-        }
-        if (!nc.isString(channelSettingsValues.environment)) {
-            messages.push(
-                `The channelSettingsValues.environment string is ${
-                    channelSettingsValues.environment == null ? "missing" : "invalid"
-                }.`
+        } else if (matchingContactMethods.length === 0) {
+            logInfo("No matching contact method found on customer.");
+            stub.out.ncStatusCode = 204;
+        } else {
+            stub.out.payload.error = new Error(
+                `Search returned multiple matching contact methods. Response: ${JSON.stringify(
+                    matchingContactMethods,
+                    null,
+                    2
+                )}`
             );
+            stub.out.ncStatusCode = 409;
         }
     }
-    return messages;
-}
 
-function validateChannelAuthValues(channelAuthValues) {
-    const messages = [];
-    if (!nc.isObject(channelAuthValues)) {
-        messages.push(`The channelAuthValues object is ${channelAuthValues == null ? "missing" : "invalid"}.`);
-    } else {
-        if (!nc.isNonEmptyString(channelAuthValues.company_id)) {
-            messages.push(
-                `The channelAuthValues.company_id string is ${
-                    channelAuthValues.company_id == null ? "missing" : "invalid"
-                }.`
-            );
+    async function handleError(error) {
+        logError(error);
+        if (error.name === "StatusCodeError") {
+            stub.out.response.endpointStatusCode = error.statusCode;
+            stub.out.response.endpointStatusMessage = error.message;
+            if (error.statusCode >= 500) {
+                stub.out.ncStatusCode = 500;
+            } else if (error.statusCode === 429) {
+                logWarn("Request was throttled.");
+                stub.out.ncStatusCode = 429;
+            } else {
+                stub.out.ncStatusCode = 400;
+            }
         }
-        if (!nc.isNonEmptyString(channelAuthValues.access_token)) {
-            messages.push(
-                `The channelAuthValues.access_token string is ${
-                    channelAuthValues.access_token == null ? "missing" : "invalid"
-                }.`
-            );
-        }
+        stub.out.payload.error = error;
+        stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
     }
-    return messages;
 }
 
 module.exports.CheckForCustomerContact = CheckForCustomerContact;

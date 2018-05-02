@@ -45,7 +45,7 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
+              "uri": "/v1/Companies(23813)/Customers?%24filter=UniqueIdentifier%20eq%20%27bob%40ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -119,9 +119,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -139,7 +137,7 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
+              "uri": "/v1/Companies(23813)/Customers?%24filter=UniqueIdentifier%20eq%20%27bob%40ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -147,9 +145,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -167,7 +163,7 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
+              "uri": "/v1/Companies(23813)/Customers?%24filter=UniqueIdentifier%20eq%20%27bob%40ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -306,9 +302,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -326,7 +320,7 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
+              "uri": "/v1/Companies(23813)/Customers?%24filter=UniqueIdentifier%20eq%20%27bob%40ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 400,
@@ -334,9 +328,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -354,7 +346,7 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
+              "uri": "/v1/Companies(23813)/Customers?%24filter=UniqueIdentifier%20eq%20%27bob%40ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 429,
@@ -362,9 +354,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -382,7 +372,7 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/v1/Companies(28313)/CustomerSearch?$filter=UniqueIdentifier%20eq%20%27bob@ncmail.com%27",
+              "uri": "/v1/Companies(23813)/Customers?%24filter=UniqueIdentifier%20eq%20%27bob%40ncmail.com%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 500,
@@ -390,9 +380,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         }
       ]
@@ -827,11 +815,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -877,11 +861,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -940,11 +920,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -976,11 +952,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -1012,11 +984,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -1048,11 +1016,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         }
       ]
@@ -1771,7 +1735,8 @@
             "doc": {
               "ContactMethods": [
                 {
-                  "ContactType": "Home"}
+                  "ContactType": "Home"
+                }
               ]
             }
           },
@@ -2534,9 +2499,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -2568,9 +2531,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -2602,9 +2563,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -2636,9 +2595,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         }
       ]
@@ -2887,11 +2844,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -2920,11 +2873,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -2953,11 +2902,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -2986,11 +2931,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         }
       ]
@@ -3403,9 +3344,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -3438,9 +3377,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -3473,9 +3410,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         },
         {
@@ -3508,9 +3443,7 @@
             }
           ],
           "channelProfile": {
-            "customerBusinessReferences": [
-              "UniqueIdentifier"
-            ]
+            "customerBusinessReferences": ["UniqueIdentifier"]
           }
         }
       ]
@@ -3550,7 +3483,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 200,
@@ -3612,7 +3546,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 400,
@@ -3657,7 +3592,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 429,
@@ -3702,7 +3638,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/Addresses(a08b0640-606a-41f0-901a-facaf50e75dd)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 500,
@@ -3744,7 +3681,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 200,
@@ -3764,11 +3702,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -3790,7 +3724,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 400,
@@ -3798,11 +3733,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -3824,7 +3755,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 429,
@@ -3832,11 +3764,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         },
         {
@@ -3858,7 +3786,8 @@
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
+              "uri":
+                "/Companies(23813)/Customers(659c2a38-d083-4421-9330-46d779702f85)/ContactMethods(b25dd8b2-a24d-4107-8fbe-9c7b21e18137)",
               "method": "PUT",
               "replyHeaders": {},
               "statusCode": 500,
@@ -3866,11 +3795,7 @@
             }
           ],
           "channelProfile": {
-            "customerContactBusinessReferences": [
-              "ContactMethodCategoryId",
-              "ContactMethodTypeId",
-              "Value"
-            ]
+            "customerContactBusinessReferences": ["ContactMethodCategoryId", "ContactMethodTypeId", "Value"]
           }
         }
       ]
@@ -4424,9 +4349,7 @@
             }
           ],
           "channelProfile": {
-            "productSimpleBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productSimpleBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4526,9 +4449,7 @@
             }
           ],
           "channelProfile": {
-            "productSimpleBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productSimpleBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4555,9 +4476,7 @@
             }
           ],
           "channelProfile": {
-            "productSimpleBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productSimpleBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4589,9 +4508,7 @@
             }
           ],
           "channelProfile": {
-            "productSimpleBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productSimpleBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4623,9 +4540,7 @@
             }
           ],
           "channelProfile": {
-            "productSimpleBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productSimpleBusinessReferences": ["VendorSku.Value"]
           }
         }
       ]
@@ -4752,9 +4667,7 @@
             }
           ],
           "channelProfile": {
-            "productMatrixBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productMatrixBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4876,9 +4789,7 @@
             }
           ],
           "channelProfile": {
-            "productMatrixBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productMatrixBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4905,9 +4816,7 @@
             }
           ],
           "channelProfile": {
-            "productMatrixBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productMatrixBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4939,9 +4848,7 @@
             }
           ],
           "channelProfile": {
-            "productMatrixBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productMatrixBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -4973,9 +4880,7 @@
             }
           ],
           "channelProfile": {
-            "productMatrixBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productMatrixBusinessReferences": ["VendorSku.Value"]
           }
         }
       ]
@@ -5226,9 +5131,7 @@
             }
           ],
           "channelProfile": {
-            "productPricingBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productPricingBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -5474,9 +5377,7 @@
             }
           ],
           "channelProfile": {
-            "productPricingBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productPricingBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -5503,9 +5404,7 @@
             }
           ],
           "channelProfile": {
-            "productPricingBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productPricingBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -5537,9 +5436,7 @@
             }
           ],
           "channelProfile": {
-            "productPricingBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productPricingBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -5571,9 +5468,7 @@
             }
           ],
           "channelProfile": {
-            "productPricingBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productPricingBusinessReferences": ["VendorSku.Value"]
           }
         }
       ]
@@ -5782,9 +5677,7 @@
             }
           ],
           "channelProfile": {
-            "productQuantityBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productQuantityBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -5988,9 +5881,7 @@
             }
           ],
           "channelProfile": {
-            "productQuantityBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productQuantityBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -6017,9 +5908,7 @@
             }
           ],
           "channelProfile": {
-            "productQuantityBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productQuantityBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -6051,9 +5940,7 @@
             }
           ],
           "channelProfile": {
-            "productQuantityBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productQuantityBusinessReferences": ["VendorSku.Value"]
           }
         },
         {
@@ -6085,9 +5972,7 @@
             }
           ],
           "channelProfile": {
-            "productQuantityBusinessReferences": [
-              "VendorSku.Value"
-            ]
+            "productQuantityBusinessReferences": ["VendorSku.Value"]
           }
         }
       ]

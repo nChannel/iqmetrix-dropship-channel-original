@@ -1,460 +1,233 @@
-const stubName = "GetProductQuantityFromQuery";
-const nc = require("./util/ncUtils");
-const baseRequest = require("request-promise-native");
-let request,
-  access_token,
-  company_id,
-  protocol,
-  environment,
-  subscriptionLists,
-  startDateGMT,
-  endDateGMT,
-  productQuantityBusinessReferences,
-  validationMessages,
-  out;
-
-/**
- * The GetProductQuantityFromQuery function will retrieve available quantity from iQmetrix APIs.
- *
- * First, it will make 1 api call for each subscription list to fetch the product headers for that list.
- * Second, it will merge these lists into a single master list of products.
- * Third, it will split the product list into batches of 500 products and make 1 api call per batch to fetch details.
- * Fourth, it will filter the VendorSkus array to include only the supplier provided for the subscription list.
- * Fifth, it will make 1 api call for each product on the list to fetch availability details.
- * Sixth, it will check the modified date on the SupplierSku element for each item,
- *        discarding the item if it has not been modified within the requested time frame.
- * Finally, it will pass the remaining products back to the callback function.
- */
 function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payload, callback) {
-  logInfo(`Beginning ${stubName}...`);
-  validateCallback(callback);
+    const nc = require("./util/ncUtils");
+    const referenceLocations = ["productQuantityBusinessReferences"];
+    const stub = new nc.Stub("GetProductQuantityFromQuery", referenceLocations, ...arguments);
 
-  validateArguments(...arguments)
-    .then(getProductLists)
-    .then(flattenProductLists)
-    .then(getProductDetails)
-    .then(filterVendors)
-    .then(getAvailability)
-    //.then(keepModifiedItems) // The necessary timestamp is not yet being returned by the iQmetrix API
-    .then(buildResponseObject)
-    .catch(error => {
-      logError(`An error occurred during ${stubName}: ${error}`);
-      if (!out.ncStatusCode) {
-        out.ncStatusCode = error.statusCode ? error.statusCode : 500;
-      }
-      out.payload.error = error;
-      return out;
-    })
-    .then(callback)
-    .catch(error => {
-      logError("The callback function threw an exception.");
-      logError(error);
-      throw error;
-    });
-}
+    validateFunction()
+        .then(getProductLists)
+        .then(flattenProductLists)
+        .then(getProductDetails)
+        .then(filterVendors)
+        .then(getAvailability)
+        //.then(keepModifiedItems) // The necessary timestamp is not yet being returned by the iQmetrix API
+        .then(buildResponseObject)
+        .catch(handleError)
+        .then(() => callback(stub.out))
+        .catch(error => {
+            logError(`The callback function threw an exception: ${error}`);
+            setTimeout(() => {
+                throw error;
+            });
+        });
 
-/**
- * Pulls down the product headers for each subscription list provided
- *
- * @returns array of arrays of products
- */
-async function getProductLists() {
-  logInfo("Get product lists...");
-  const productLists = await Promise.all(subscriptionLists.map(getProductList));
-  return productLists;
-}
-
-/**
- * Fetches products belonging to specified subscription list
- *
- * @param {object} subscriptionList Provided by channelProfileSettings
- * @returns list of products with subscription list details appended to each product for future reference
- */
-async function getProductList(subscriptionList) {
-  logInfo(`Get product list [${subscriptionList.listId}]...`);
-  const response = await request.get({
-    url: `${protocol}://catalogs${environment}.iqmetrix.net/v1/Companies(${company_id})/Catalog/Items(SourceId=${
-      subscriptionList.listId
-    })`
-  });
-  response.body.Items.forEach(item => {
-    item.subscriptionList = subscriptionList;
-  });
-  return response.body.Items;
-}
-
-/**
- * Merges array of arrays into a single list of products
- *
- * @param {array[]} productLists
- * @returns array of products
- */
-async function flattenProductLists(productLists) {
-  logInfo("Flatten product lists...");
-  return [].concat(...productLists);
-}
-
-/**
- * Fetches product details for each product in batches of up to 500
- *
- * @param {array} productList
- * @returns product list with additional details appended to each product
- */
-async function getProductDetails(productList) {
-  logInfo("Get product details...");
-  const allIds = productList.map(p => p.CatalogItemId);
-  const batchedIds = [];
-  const max = 500;
-  let current = 0;
-  do {
-    const batchIds = allIds.slice(current, current + max);
-    batchedIds.push(batchIds);
-    current = current + max;
-  } while (current < allIds.length);
-  const batchedDetails = await Promise.all(batchedIds.map(getProductDetailsBulk));
-  const CatalogItems = Object.assign({}, ...batchedDetails);
-  productList.forEach(product => {
-    product.ProductDetails = CatalogItems[product.CatalogItemId];
-  });
-  return productList;
-}
-
-/**
- * POST list of catalog ids to iQmetrix api and receive array of product details
- *
- * @param {array} catalogIds
- * @returns product details
- */
-async function getProductDetailsBulk(catalogIds) {
-  logInfo(`Get ${catalogIds.length} product details...`);
-  const response = await request.post({
-    url: `${protocol}://catalogs${environment}.iqmetrix.net/v1/Companies(${company_id})/Catalog/Items/ProductDetails/Bulk`,
-    body: {
-      CatalogItemIds: catalogIds
+    function logInfo(msg) {
+        stub.log(msg, "info");
     }
-  });
-  return response.body.CatalogItems;
-}
 
-/**
- * Remove all but the supplier specified with the associated subscription list
- *
- * @param {array} productList
- * @returns array of products with unused vendors removed
- */
-async function filterVendors(productList) {
-  logInfo("Filter vendors...");
-  productList.forEach(product => {
-    const entityId = product.subscriptionList.entityId;
-    const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
-      return vendor.Entity && vendor.Entity.Id == entityId;
-    });
-    product.VendorSku = VendorSkus[0];
-  });
-  return productList;
-}
-
-/**
- * Gets availability of all items for each suppliers entire catalog.
- * Merges each catalog into a single array.
- * Walks through our product list and pulls matching record from supplier availability list
- *
- * @param {array} productList
- * @returns array of products with supplier availability appended to each product
- */
-async function getAvailability(productList) {
-  logInfo("Get supplier availability for all skus...");
-  const supplierSkuLists = await Promise.all(subscriptionLists.map(getSupplierSkus));
-  const flatSkuLists = [].concat(...supplierSkuLists);
-  productList.forEach(product => {
-    const vendorSku = product.ProductDetails.VendorSkus[0].Value;
-    const entityId = product.ProductDetails.VendorSkus[0].Entity.Id;
-    const quantities = flatSkuLists.filter(s => s.SupplierSku == vendorSku && s.SupplierEntityId == entityId);
-    if (quantities.length === 1) {
-      product.SupplierSku = quantities[0];
-    } else if (quantities.length > 1) {
-      throw new Error(`Vendor sku ${vendorSku} has multiple inventory records for supplier ${entityId}`);
+    function logWarn(msg) {
+        stub.log(msg, "warn");
     }
-  });
-  return productList;
-}
 
-/**
- * Gets the availability records for all products in a given suppliers entire catalog
- *
- * @param {object} subscriptionList
- * @returns array of supplier skus with availability
- */
-async function getSupplierSkus(subscriptionList) {
-  logInfo(`Get skus for supplier [${subscriptionList.entityId}]...`);
-  const response = await request.get({
-    url: `${protocol}://availability${environment}.iqmetrix.net/v1/Suppliers(${
-      subscriptionList.entityId
-    })/Companies(${company_id})/SupplierSkus`
-  });
-  return response.body;
-}
-
-/**
- * Checks the modified timestamp in the SupplierSku element of each product and
- * discards products that were not modified within the requested time frame.
- *
- * @param {array} productList
- * @returns array of products
- */
-async function keepModifiedItems(productList) {
-  logInfo("Keep items whose quantity has been modified...");
-  const start = Date.parse(startDateGMT);
-  const end = Date.parse(endDateGMT);
-  const products = productList.filter(product => {
-    const skuMod = Date.parse(product.SupplierSku.DateUpdatedUtc);
-    return skuMod >= start && skuMod <= end;
-  });
-  logInfo(`${products.length} of ${productList.length} quantities have been modified within the given date range.`);
-  return products;
-}
-
-/**
- * Builds the response object to be provided to the callback function
- *
- * @param {array} products
- * @returns response object
- */
-async function buildResponseObject(products) {
-  logInfo(`Submitting ${products.length} modified quantities...`);
-  if (products.length > 0) {
-    out.ncStatusCode = 200;
-    out.payload = [];
-    products.forEach(product => {
-      out.payload.push({
-        doc: product,
-        productQuantityRemoteID: product.CatalogItemId,
-        productQuantityBusinessReference: nc.extractBusinessReferences(productQuantityBusinessReferences, product)
-      });
-    });
-  } else {
-    out.ncStatusCode = 204;
-  }
-  return out;
-}
-
-/**
- * Validates the arguments passed into this function
- *
- * @param {object} ncUtil
- * @param {object} channelProfile
- * @param {object} flowContext
- * @param {object} payload
- */
-async function validateArguments(ncUtil, channelProfile, flowContext, payload) {
-  logInfo("Validating arguments...");
-
-  validationMessages = [];
-  out = { ncStatusCode: null, response: {}, payload: {} };
-
-  validateNcUtil(ncUtil);
-  validateChannelProfile(channelProfile);
-  //validateFlowContext(flowContext);
-  validatePayload(payload);
-
-  if (validationMessages.length > 0) {
-    validationMessages.forEach(msg => logError(msg));
-    out.ncStatusCode = 400;
-    throw new Error(`${stubName}: Invalid request [${validationMessages.join(", ")}]`);
-  }
-
-  company_id = channelProfile.channelAuthValues.company_id;
-  access_token = channelProfile.channelAuthValues.access_token;
-  protocol = channelProfile.channelSettingsValues.protocol;
-  environment = channelProfile.channelSettingsValues.environment;
-  subscriptionLists = channelProfile.channelSettingsValues.subscriptionLists;
-  startDateGMT = payload.doc.modifiedDateRange.startDateGMT;
-  endDateGMT = payload.doc.modifiedDateRange.endDateGMT;
-  productQuantityBusinessReferences = channelProfile.productQuantityBusinessReferences;
-
-  request = baseRequest.defaults({
-    auth: {
-      bearer: access_token
-    },
-    json: true,
-    gzip: true,
-    resolveWithFullResponse: true
-  });
-}
-
-/**
- * Validate that the ncUtil argument is an object
- *
- * @param {object} ncUtil
- */
-function validateNcUtil(ncUtil) {
-  if (!nc.isObject(ncUtil)) {
-    validationMessages.push(`The ncUtil object is ${ncUtil == null ? "missing" : "invalid"}.`);
-  }
-}
-
-/**
- * Validate that the channelProfile argument is an object and that it has specific properties that are required.
- *
- * @param {object} channelProfile
- * @param {object} channelProfile.channelSettingsValues
- * @param {object} channelProfile.channelAuthValues
- * @param {string[]} channelProfile.productQuantityBusinessReferences
- */
-function validateChannelProfile(channelProfile) {
-  if (!nc.isObject(channelProfile)) {
-    validationMessages.push(`The channelProfile object is ${channelProfile == null ? "missing" : "invalid"}.`);
-  } else {
-    validateChannelSettingsValues(channelProfile.channelSettingsValues);
-    validateChannelAuthValues(channelProfile.channelAuthValues);
-    if (!nc.isNonEmptyArray(channelProfile.productQuantityBusinessReferences)) {
-      validationMessages.push(
-        `The channelProfile.productQuantityBusinessReferences array is ${
-          channelProfile.productQuantityBusinessReferences == null ? "missing" : "invalid"
-        }.`
-      );
+    function logError(msg) {
+        stub.log(msg, "error");
     }
-  }
-}
 
-/**
- * Validate that the channelSettingsValues parameter is an object and that it has specific properties that are required.
- *
- * @param {object} channelSettingsValues
- * @param {string} channelSettingsValues.protocol
- * @param {string} channelSettingsValues.environment
- * @param {object[]} channelSettingsValues.subscriptionLists
- */
-function validateChannelSettingsValues(channelSettingsValues) {
-  if (!nc.isObject(channelSettingsValues)) {
-    validationMessages.push(
-      `The channelSettingsValues object is ${channelSettingsValues == null ? "missing" : "invalid"}.`
-    );
-  } else {
-    if (!nc.isNonEmptyString(channelSettingsValues.protocol)) {
-      validationMessages.push(
-        `The channelSettingsValues.protocol string is ${
-          channelSettingsValues.protocol == null ? "missing" : "invalid"
-        }.`
-      );
-    }
-    if (!nc.isString(channelSettingsValues.environment)) {
-      validationMessages.push(
-        `The channelSettingsValues.environment string is ${
-          channelSettingsValues.environment == null ? "missing" : "invalid"
-        }.`
-      );
-    }
-    if (!nc.isNonEmptyArray(channelSettingsValues.subscriptionLists)) {
-      validationMessages.push(
-        `The channelSettingsValues.subscriptionLists array is ${
-          channelSettingsValues.subscriptionLists == null ? "missing" : "invalid"
-        }.`
-      );
-    }
-  }
-}
+    async function validateFunction() {
+        if (stub.messages.length === 0) {
+            if (!nc.isNonEmptyArray(stub.channelProfile.channelSettingsValues.subscriptionLists)) {
+                stub.messages.push(
+                    `The channelProfile.channelSettingsValues.subscriptionLists array is ${
+                        stub.channelProfile.channelSettingsValues.subscriptionLists == null ? "missing" : "invalid"
+                    }.`
+                );
+            }
 
-/**
- * Validate that the channelAuthValues parameter is an object and that it has specific properties that are required.
- *
- * @param {object} channelAuthValues
- * @param {string} channelAuthValues.company_id
- * @param {string} channelAuthValues.access_token
- */
-function validateChannelAuthValues(channelAuthValues) {
-  if (!nc.isObject(channelAuthValues)) {
-    validationMessages.push(`The channelAuthValues object is ${channelAuthValues == null ? "missing" : "invalid"}.`);
-  } else {
-    if (!nc.isNonEmptyString(channelAuthValues.company_id)) {
-      validationMessages.push(
-        `The channelAuthValues.company_id string is ${channelAuthValues.company_id == null ? "missing" : "invalid"}.`
-      );
-    }
-    if (!nc.isNonEmptyString(channelAuthValues.access_token)) {
-      validationMessages.push(
-        `The channelAuthValues.access_token string is ${
-          channelAuthValues.access_token == null ? "missing" : "invalid"
-        }.`
-      );
-    }
-  }
-}
+            if (!nc.isObject(stub.payload.doc.modifiedDateRange)) {
+                stub.messages.push(
+                    `The payload.doc.modifiedDateRange object is ${
+                        stub.payload.doc.modifiedDateRange == null ? "missing" : "invalid"
+                    }.`
+                );
+            } else {
+                if (!nc.isNonEmptyString(stub.payload.doc.modifiedDateRange.startDateGMT)) {
+                    stub.messages.push(
+                        `The payload.doc.modifiedDateRange.startDateGMT string is ${
+                            stub.payload.doc.modifiedDateRange.startDateGMT == null ? "missing" : "invalid"
+                        }.`
+                    );
+                }
+                if (!nc.isNonEmptyString(stub.payload.doc.modifiedDateRange.endDateGMT)) {
+                    stub.messages.push(
+                        `The payload.doc.modifiedDateRange.endDateGMT string is ${
+                            stub.payload.doc.modifiedDateRange.endDateGMT == null ? "missing" : "invalid"
+                        }.`
+                    );
+                }
+            }
+        }
 
-/**
- * Validate that the flowContext argument is an object.
- *
- * @param {object} flowContext
- */
-function validateFlowContext(flowContext) {
-  if (!nc.isObject(flowContext)) {
-    validationMessages.push(`The flowContext object is ${flowContext == null ? "missing" : "invalid"}.`);
-  }
-}
+        if (stub.messages.length > 0) {
+            stub.messages.forEach(msg => logError(msg));
+            stub.out.ncStatusCode = 400;
+            throw new Error(`Invalid request [${stub.messages.join(" ")}]`);
+        }
+        logInfo("Function is valid.");
+    }
 
-/**
- * Validate that the payload argument is an object and that it has specific properties that are required.
- *
- * @param {object} payload
- * @param {object} payload.doc
- * @param {object} payload.doc.modifiedDateRange
- * @param {string} payload.doc.modifiedDateRange.startDateGMT
- * @param {string} payload.doc.modifiedDateRange.endDateGMT
- */
-function validatePayload(payload) {
-  if (!nc.isObject(payload)) {
-    validationMessages.push(`The payload object is ${payload == null ? "missing" : "invalid"}.`);
-  } else {
-    if (!nc.isObject(payload.doc)) {
-      validationMessages.push(`The payload.doc object is ${payload.doc == null ? "missing" : "invalid"}.`);
-    } else {
-      if (!nc.isObject(payload.doc.modifiedDateRange)) {
-        validationMessages.push(
-          `The payload.doc.modifiedDateRange object is ${
-            payload.doc.modifiedDateRange == null ? "missing" : "invalid"
-          }.`
+    async function getProductLists() {
+        logInfo("Get product lists...");
+        return await Promise.all(stub.channelProfile.channelSettingsValues.subscriptionLists.map(getProductList));
+    }
+
+    async function getProductList(subscriptionList) {
+        logInfo(`Get product list [${subscriptionList.listId}]...`);
+        const response = await stub.request.get({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://catalogs${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Catalog/Items(SourceId=${
+                subscriptionList.listId
+            })`
+        });
+        response.body.Items.forEach(item => {
+            item.subscriptionList = subscriptionList;
+        });
+        return response.body.Items;
+    }
+
+    async function flattenProductLists(productLists) {
+        logInfo("Flatten product lists...");
+        return [].concat(...productLists);
+    }
+
+    async function getProductDetails(productList) {
+        logInfo("Get product details...");
+        const allIds = productList.map(p => p.CatalogItemId);
+        const batchedIds = [];
+        const max = 500;
+        let current = 0;
+        do {
+            const batchIds = allIds.slice(current, current + max);
+            batchedIds.push(batchIds);
+            current = current + max;
+        } while (current < allIds.length);
+        const batchedDetails = await Promise.all(batchedIds.map(getProductDetailsBulk));
+        const CatalogItems = Object.assign({}, ...batchedDetails);
+        productList.forEach(product => {
+            product.ProductDetails = CatalogItems[product.CatalogItemId];
+        });
+        return productList;
+    }
+
+    async function getProductDetailsBulk(catalogIds) {
+        logInfo(`Get ${catalogIds.length} product details...`);
+        const response = await stub.request.post({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://catalogs${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${
+                stub.channelProfile.channelAuthValues.company_id
+            })/Catalog/Items/ProductDetails/Bulk`,
+            body: {
+                CatalogItemIds: catalogIds
+            }
+        });
+        return response.body.CatalogItems;
+    }
+
+    async function filterVendors(productList) {
+        logInfo("Filter vendors...");
+        productList.forEach(product => {
+            const entityId = product.subscriptionList.entityId;
+            const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
+                return vendor.Entity && vendor.Entity.Id === entityId;
+            });
+            product.VendorSku = VendorSkus[0];
+        });
+        return productList;
+    }
+
+    async function getAvailability(productList) {
+        logInfo("Get supplier availability for all skus...");
+        const supplierSkuLists = await Promise.all(
+            stub.channelProfile.channelSettingsValues.subscriptionLists.map(getSupplierSkus)
         );
-      } else {
-        if (!nc.isNonEmptyString(payload.doc.modifiedDateRange.startDateGMT)) {
-          validationMessages.push(
-            `The payload.doc.modifiedDateRange.startDateGMT string is ${
-              payload.doc.modifiedDateRange.startDateGMT == null ? "missing" : "invalid"
-            }.`
-          );
-        }
-        if (!nc.isNonEmptyString(payload.doc.modifiedDateRange.endDateGMT)) {
-          validationMessages.push(
-            `The payload.doc.modifiedDateRange.endDateGMT string is ${
-              payload.doc.modifiedDateRange.endDateGMT == null ? "missing" : "invalid"
-            }.`
-          );
-        }
-      }
+        const flatSkuLists = [].concat(...supplierSkuLists);
+        productList.forEach(product => {
+            const vendorSku = product.ProductDetails.VendorSkus[0].Value;
+            const entityId = product.ProductDetails.VendorSkus[0].Entity.Id;
+            const quantities = flatSkuLists.filter(s => s.SupplierSku == vendorSku && s.SupplierEntityId == entityId);
+            if (quantities.length === 1) {
+                product.SupplierSku = quantities[0];
+            } else if (quantities.length > 1) {
+                throw new Error(`Vendor sku ${vendorSku} has multiple inventory records for supplier ${entityId}`);
+            }
+        });
+        return productList;
     }
-  }
-}
 
-/**
- * Validate that the callback argument is a function
- *
- * @param {function} cb
- */
-function validateCallback(cb) {
-  if (!nc.isFunction(cb)) {
-    logError(`The callback function is ${cb == null ? "missing" : "invalid"}.`);
-    if (cb == null) {
-      throw new Error("A callback function was not provided");
+    async function getSupplierSkus(subscriptionList) {
+        logInfo(`Get skus for supplier [${subscriptionList.entityId}]...`);
+        const response = await stub.request.get({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://availability${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Suppliers(${subscriptionList.entityId})/Companies(${
+                stub.channelProfile.channelAuthValues.company_id
+            })/SupplierSkus`
+        });
+        return response.body;
     }
-    throw new TypeError("callback is not a function");
-  }
-}
 
-function logInfo(msg) {
-  nc.log(msg, "info", stubName);
-}
+    async function keepModifiedItems(productList) {
+        logInfo("Keep items whose quantity has been modified...");
+        const start = Date.parse(stub.payload.doc.modifiedDateRange.startDateGMT);
+        const end = Date.parse(stub.payload.doc.modifiedDateRange.endDateGMT);
+        const products = productList.filter(product => {
+            const skuMod = Date.parse(product.SupplierSku.DateUpdatedUtc);
+            return skuMod >= start && skuMod <= end;
+        });
+        logInfo(
+            `${products.length} of ${productList.length} quantities have been modified within the given date range.`
+        );
+        return products;
+    }
 
-function logError(msg) {
-  nc.log(msg, "error", stubName);
+    async function buildResponseObject(products) {
+        if (products.length > 0) {
+            logInfo(`Submitting ${products.length} modified product quantities...`);
+            stub.out.ncStatusCode = 200;
+            stub.out.payload = [];
+            products.forEach(product => {
+                stub.out.payload.push({
+                    doc: product,
+                    productQuantityRemoteID: product.CatalogItemId,
+                    productQuantityBusinessReference: nc.extractBusinessReferences(
+                        productQuantityBusinessReferences,
+                        product
+                    )
+                });
+            });
+        } else {
+            logInfo("No product quantities have been modified.");
+            out.ncStatusCode = 204;
+        }
+    }
+
+    async function handleError(error) {
+        logError(error);
+        if (error.name === "StatusCodeError") {
+            stub.out.response.endpointStatusCode = error.statusCode;
+            stub.out.response.endpointStatusMessage = error.message;
+            if (error.statusCode >= 500) {
+                stub.out.ncStatusCode = 500;
+            } else if (error.statusCode === 429) {
+                logWarn("Request was throttled.");
+                stub.out.ncStatusCode = 429;
+            } else {
+                stub.out.ncStatusCode = 400;
+            }
+        }
+        stub.out.payload.error = error;
+        stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
+    }
 }
 
 module.exports.GetProductQuantityFromQuery = GetProductQuantityFromQuery;
