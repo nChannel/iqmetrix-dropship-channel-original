@@ -369,6 +369,28 @@
       }
     },
     {
+      "name": "GET FULFILLMENT",
+      "description": "GET FULFILLMENT",
+      "channelVerb": "GET",
+      "channelNoun": "FULFILLMENT",
+      "ruleDef": {
+        "ruleSchema": {},
+        "defaultRuleValues": {}
+      },
+      "configDef": {
+        "configModel": {},
+        "configView": [],
+        "configValues": {}
+      },
+      "documentDef": {
+        "schema": {},
+        "referenceLocation": {
+          "fulfillmentBusinessReferences": ["id"],
+          "salesOrderBusinessReferences": ["invoiceNumber"]
+        }
+      }
+    },
+    {
       "name": "GET CUSTOMER",
       "description": "GET CUSTOMER",
       "channelVerb": "GET",
