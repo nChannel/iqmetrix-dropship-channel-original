@@ -136,9 +136,9 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
     async function filterVendors(productList) {
         logInfo("Filter vendors...");
         productList.forEach(product => {
-            const entityId = product.subscriptionList.entityId;
+            const supplierId = product.subscriptionList.supplierId;
             const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
-                return vendor.Entity && vendor.Entity.Id === entityId;
+                return vendor.Entity && vendor.Entity.Id === supplierId;
             });
             product.VendorSku = VendorSkus[0];
         });
@@ -165,11 +165,11 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
     }
 
     async function getSupplierSkus(subscriptionList) {
-        logInfo(`Get skus for supplier [${subscriptionList.entityId}]...`);
+        logInfo(`Get skus for supplier [${subscriptionList.supplierId}]...`);
         const response = await stub.request.get({
             url: `${stub.channelProfile.channelSettingsValues.protocol}://availability${
                 stub.channelProfile.channelSettingsValues.environment
-            }.iqmetrix.net/v1/Suppliers(${subscriptionList.entityId})/Companies(${
+            }.iqmetrix.net/v1/Suppliers(${subscriptionList.supplierId})/Companies(${
                 stub.channelProfile.channelAuthValues.company_id
             })/SupplierSkus`
         });

@@ -17,11 +17,11 @@
       "subscriptionLists": [
         {
           "listId": "419faf6c-3906-47d8-a855-f3883d58902d",
-          "entityId": 7190
+          "supplierId": 7190
         },
         {
           "listId": "e7a9e7b1-4708-460c-ae34-37c30e64f14a",
-          "entityId": 13939
+          "supplierId": 13939
         }
       ]
     }

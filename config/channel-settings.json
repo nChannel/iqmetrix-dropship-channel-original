@@ -550,14 +550,14 @@
                   "title": "List ID",
                   "type": "string"
                 },
-                "entityId": {
-                  "title": "Entity ID",
+                "supplierId": {
+                  "title": "Supplier ID",
                   "type": "integer"
                 }
               },
               "required": [
                 "listId",
-                "entityId"
+                "supplierId"
               ]
             }
           }
@@ -570,10 +570,15 @@
           "subscriptionLists"
         ]
       },
-      "configView": [],
+      "configView": [
+        "protocol",
+        "environment",
+        "maxParallelRequests",
+        "subscriptionLists"
+      ],
       "configValues": {
         "protocol": "https",
-        "implFolderName": "iqmetrix-dropship",
+        "implFolderName": "iqmetrix-dropship-channel",
         "environment": "demo"
       }
     }

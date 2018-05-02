@@ -152,9 +152,9 @@ function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload
     async function filterVendors(productList) {
         logInfo("Filter vendors...");
         productList.forEach(product => {
-            const entityId = product.subscriptionList.entityId;
+            const supplierId = product.subscriptionList.supplierId;
             const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
-                return vendor.Entity && vendor.Entity.Id === entityId;
+                return vendor.Entity && vendor.Entity.Id === supplierId;
             });
             product.VendorSku = VendorSkus[0];
         });
