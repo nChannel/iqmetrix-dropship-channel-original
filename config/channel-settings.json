@@ -192,7 +192,7 @@
       },
       "documentDef": {
         "schema": {},
-        "referenceLocation": {"productPricingBusinessReferences": [""]}
+        "referenceLocation": {"productPricingBusinessReferences": ["VendorSku.Value"]}
       }
     },
     {
@@ -243,7 +243,7 @@
       },
       "documentDef": {
         "schema": {},
-        "referenceLocation": {"productQuantityBusinessReferences": [""]}
+        "referenceLocation": {"productQuantityBusinessReferences": ["VendorSku.Value"]}
       }
     },
     {
@@ -328,7 +328,7 @@
       },
       "documentDef" : {
         "schema": {},
-        "referenceLocation": {"salesOrderBusinessReferences": [""]}
+        "referenceLocation": {"salesOrderBusinessReferences": ["DropshipOrder.TenderId"]}
       }
     },
     {
