@@ -23,7 +23,8 @@
           "listId": "e7a9e7b1-4708-460c-ae34-37c30e64f14a",
           "supplierId": 13939
         }
-      ]
+      ],
+      "canPostInvoice": "SaleInvoice"
     }
   },
   "docs": [
@@ -3648,85 +3649,823 @@
         {
           "ncStatusCode": 201,
           "payload": {
-            "doc": {}
+            "doc": {
+              "DropshipOrder": {
+                "Name": "iPhone 5 Order",
+                "BillingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "BillingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "DiscountAmount": 15,
+                "DiscountCode": "MTRY-15",
+                "DiscountDescription": "Military discount",
+                "EmployeeId": 15,
+                "EntityId": 23841,
+                "OrderExpiryHours": 20,
+                "OrderTypeId": 3,
+                "ShippingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "ShippingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "ShippingEntityId": 23841,
+                "State": "Created",
+                "TenderId": "INV112",
+                "Items": [
+                  {
+                    "Cost": 5.99,
+                    "Description": "Samsung Galaxy S4 Standard Battery",
+                    "ItemStatusId": 1,
+                    "ItemTypeId": "1",
+                    "Index": 0,
+                    "ListPrice": 12.99,
+                    "Notes": "Dented corner",
+                    "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "Quantity": 2,
+                    "SellingPrice": 9.99,
+                    "SerialNumbers": [
+                      "abc321"
+                    ],
+                    "SKU": "00001",
+                    "ShippingOptionId": "1",
+                    "SupplierEntityId": 14107,
+                    "SupplierReference": "10",
+                    "TrackingInformation": [
+                      {
+                        "Quantity": 1,
+                        "TrackingNumber": "1TTTTN4421"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "SalesOrder": {
+                "DateCreatedUtc": "2018-01-04T16:00:00",
+                "LocationId": 23841,
+                "CustomerId": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+                "Items": [
+                  {
+                    "LineNumber": 1,
+                    "ItemType": "InStock",
+                    "Quantity": 1,
+                    "ProductCatalogId": "55c8b270-63b9-a095-d975-9a730b3dacb4",
+                    "CorrelationId": "00001",
+                    "SupplierEntityId": 14107,
+                    "Price": 99.98,
+                    "PricingTermId": 2,
+                    "TaxLineItems": [
+                      {
+                        "IqTaxServiceId": "fe73a2fd-1751-42a9-ac3d-d9d10e1317a4"
+                      }
+                    ]
+                  }
+                ],
+                "Payments": [
+                  {
+                    "Id": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                    "Amount": 100.2,
+                    "AuthCode": "VISA_253189",
+                    "TransactionNumber": "DSX-39718",
+                    "Token": "OslkhrXM",
+                    "PaymentMethodId": "3500899B-22BB-426D-B642-1C0D6552D0AB",
+                    "CorrelationId": "DSX-87924"
+                  }
+                ],
+                "DiscountLineItems": [
+                  {
+                    "LineNumber": 1,
+                    "Amount": 9,
+                    "Name": "BOGO 50",
+                    "DiscountCode": "BOGO50",
+                    "AssociatedLineItems": [
+                      1
+                    ]
+                  }
+                ],
+                "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                "BillingAddressId": "1e93b1bc-ecf7-46f5-8be4-e20284e0df36",
+                "ShippingAddressId": "8f49e60a-5714-4fd2-9d68-223114227011",
+                "PrintableId": "229045",
+                "DropshipOrderId": "77797903-46B4-4D33-BCDD-1D0348515F39",
+                "UserId": 4349
+              },
+              "Customer": {
+                "PrimaryName": "Princess",
+                "MiddleName": "Ella",
+                "FamilyName": "Jasmine",
+                "AlternateName": "Jas",
+                "CustomerTypeId": 2,
+                "DateOfBirth": "1952-07-23T12:00:00.000",
+                "Disabled": false,
+                "DoNotContact": true,
+                "Notes": "Interested in iPhone 6",
+                "Title": "Ms"
+              },
+              "BillingAddress": {
+                "AddressTypeId": 2,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              },
+              "ShippingAddress": {
+                "AddressTypeId": 3,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              }
+            },
+            "customerRemoteID": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+            "shippingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "shippingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd",
+            "billingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "billingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://orderdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
+              "baseUri": "https://catalogsdemo.iqmetrix.net/v1",
+              "uri": "/Companies(23813)/Catalog/Items/ByVendorSku?vendorsku=00001&vendorid=14107",
+              "method": "GET",
+              "replyHeaders": {},
+              "statusCode": 200,
+              "responsePayload": {
+                "Sku": "408853",
+                "VendorId": 1217,
+                "Items": [
+                  {
+                    "CatalogItemId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "CatalogSku": "21Z8F4AQ",
+                    "DateAddedUtc": "2016-08-09T20:12:05.987",
+                    "DateUpdatedUtc": "2016-08-09T20:12:05.99",
+                    "IsArchived": false,
+                    "RmsId": "1",
+                    "Slug": "M1248-V1",
+                    "SourceIds": [
+                      "43d92a51-650e-4b85-b5d0-8d51bf4c59f4"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "uri": "/Companies(23813)/OrderFull",
               "method": "POST",
               "replyHeaders": {},
               "statusCode": 201,
               "responsePayload": {
-                "order": {
-                  "id": 1073339459
-                }
+                "Id": "cdd26b8f-4ed1-409d-9984-982e081c425e",
+                "Name": "iPhone 5 Order",
+                "BillingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "BillingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "CreatedDateUtc": "2015-03-27T18:47:29.9012402+00:00",
+                "DiscountAmount": 15,
+                "DiscountCode": "MTRY-15",
+                "DiscountDescription": "Military discount",
+                "EmployeeId": 15,
+                "EntityId": 23841,
+                "OrderExpiryDate": "2015-05-05T14:32:05.9140188+00:00",
+                "OrderExpiryHours": 20,
+                "OrderType": "Sales",
+                "OrderTypeId": 3,
+                "PrintableId": "8765-1234-987",
+                "ShippingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "ShippingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "ShippingEntityId": 23841,
+                "State": "Created",
+                "TenderId": "INV112",
+                "Items": [
+                  {
+                    "Id": "8592718e-bcca-468c-8009-38678929b693",
+                    "Cost": 5.99,
+                    "Description": "Samsung Galaxy S4 Standard Battery",
+                    "ItemStatus": "New",
+                    "ItemStatusId": 1,
+                    "ItemType": "DropShip",
+                    "ItemTypeId": "1",
+                    "Index": 0,
+                    "ListPrice": 12.99,
+                    "Notes": "Dented corner",
+                    "OrderId": "cdd26b8f-4ed1-409d-9984-982e081c425e",
+                    "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "Quantity": 2,
+                    "SellingPrice": 9.99,
+                    "SerialNumbers": [
+                      "abc321"
+                    ],
+                    "SKU": "00001",
+                    "ShippingOptionId": "1",
+                    "SupplierEntityId": 14107,
+                    "SupplierReference": "10",
+                    "TrackingInformation": [
+                      {
+                        "Quantity": 1,
+                        "TrackingNumber": "1TTTTN4421"
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "uri": "/Companies(23813)/Orders(cdd26b8f-4ed1-409d-9984-982e081c425e)/Process",
+              "method": "POST",
+              "replyHeaders": {},
+              "statusCode": 201,
+              "responsePayload": {
+                "Id": 1,
+                "OrderId": "cdd26b8f-4ed1-409d-9984-982e081c425e"
+              }
+            },
+            {
+              "baseUri": "https://salesorderdemo.iqmetrix.net/v1",
+              "uri": "/Companies(23813)/SaleInvoice",
+              "method": "POST",
+              "replyHeaders": {},
+              "statusCode": 202,
+              "responsePayload": {
+                "Id": "d8daa9df-0e3d-4355-b3f8-451b281b3be5",
+                "DateCreatedUtc": "2018-01-04T16:00:00",
+                "DateInsertedUtc": "0001-01-01T00:00:00",
+                "DateUpdatedUtc": "0001-01-01T00:00:00",
+                "CompanyId": 14146,
+                "LocationId": 14192,
+                "CustomerId": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+                "ExpiryDateUtc": null,
+                "Items": [
+                  {
+                    "LineNumber": 1,
+                    "ProductCatalogId": "55c8b270-63b9-a095-d975-9a730b3dacb4",
+                    "Quantity": 1,
+                    "Price": 99.98,
+                    "PricingTermId": 2,
+                    "CorrelationId": "6716053127",
+                    "ItemType": "InStock",
+                    "SupplierEntityId": null,
+                    "SerialNumber": null,
+                    "TaxLineItems": [
+                      {
+                        "IqTaxServiceId": "fe73a2fd-1751-42a9-ac3d-d9d10e1317a4"
+                      }
+                    ]
+                  }
+                ],
+                "Payments": [
+                  {
+                    "Id": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                    "Amount": 100.20,
+                    "AuthCode": "VISA_253189",
+                    "TransactionNumber": "DSX-39718",
+                    "Token": "OslkhrXM",
+                    "PaymentMethodId": "3500899B-22BB-426D-B642-1C0D6552D0AB",
+                    "CorrelationId": "DSX-87924"
+                  }
+                ],
+                "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                "BillingAddressId": "1e93b1bc-ecf7-46f5-8be4-e20284e0df36",
+                "ShippingAddressId": "8f49e60a-5714-4fd2-9d68-223114227011",
+                "PrintableId": "229045",
+                "DropshipOrderId": "9dd08bfc-24a0-99ed-64c4-8b5602402f91",
+                "UserId": 4349,
+                "ShippingLineItems": [
+                  {
+                    "LineNumber": 1,
+                    "Type": "USPS",
+                    "Amount": 9.99,
+                    "CorrelationId": "6716053127",
+                    "RetailerCatalogId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "AssociatedLineItems": [
+                      1
+                    ]
+                  }
+                ],
+                "DiscountLineItems": [
+                  {
+                    "LineNumber": 1,
+                    "Amount": 2.99,
+                    "Name": "BOGO 50",
+                    "DiscountCode": "M5512323DD1",
+                    "AssociatedLineItems": [
+                      1
+                    ],
+                    "RetailerCatalogId": "a183f1a9-c58f-426a-930a-9a6357db52ed"
+                  }
+                ]
               }
             }
           ],
           "channelProfile": {
-            "salesOrderBusinessReferences": ["orderid"]
+            "salesOrderBusinessReferences": ["DropshipOrder.TenderId"]
           }
         },
         {
           "ncStatusCode": 400,
           "payload": {
-            "doc": {}
+            "doc": {
+              "DropshipOrder": {
+                "Name": "iPhone 5 Order",
+                "BillingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "BillingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "DiscountAmount": 15,
+                "DiscountCode": "MTRY-15",
+                "DiscountDescription": "Military discount",
+                "EmployeeId": 15,
+                "EntityId": 23841,
+                "OrderExpiryHours": 20,
+                "OrderTypeId": 3,
+                "ShippingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "ShippingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "ShippingEntityId": 23841,
+                "State": "Created",
+                "TenderId": "INV112",
+                "Items": [
+                  {
+                    "Cost": 5.99,
+                    "Description": "Samsung Galaxy S4 Standard Battery",
+                    "ItemStatusId": 1,
+                    "ItemTypeId": "1",
+                    "Index": 0,
+                    "ListPrice": 12.99,
+                    "Notes": "Dented corner",
+                    "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "Quantity": 2,
+                    "SellingPrice": 9.99,
+                    "SerialNumbers": [
+                      "abc321"
+                    ],
+                    "SKU": "00001",
+                    "ShippingOptionId": "1",
+                    "SupplierEntityId": 14107,
+                    "SupplierReference": "10",
+                    "TrackingInformation": [
+                      {
+                        "Quantity": 1,
+                        "TrackingNumber": "1TTTTN4421"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "SalesOrder": {
+                "DateCreatedUtc": "2018-01-04T16:00:00",
+                "LocationId": 23841,
+                "CustomerId": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+                "Items": [
+                  {
+                    "LineNumber": 1,
+                    "ItemType": "InStock",
+                    "Quantity": 1,
+                    "ProductCatalogId": "55c8b270-63b9-a095-d975-9a730b3dacb4",
+                    "CorrelationId": "00001",
+                    "SupplierEntityId": 14107,
+                    "Price": 99.98,
+                    "PricingTermId": 2,
+                    "TaxLineItems": [
+                      {
+                        "IqTaxServiceId": "fe73a2fd-1751-42a9-ac3d-d9d10e1317a4"
+                      }
+                    ]
+                  }
+                ],
+                "Payments": [
+                  {
+                    "Id": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                    "Amount": 100.2,
+                    "AuthCode": "VISA_253189",
+                    "TransactionNumber": "DSX-39718",
+                    "Token": "OslkhrXM",
+                    "PaymentMethodId": "3500899B-22BB-426D-B642-1C0D6552D0AB",
+                    "CorrelationId": "DSX-87924"
+                  }
+                ],
+                "DiscountLineItems": [
+                  {
+                    "LineNumber": 1,
+                    "Amount": 9,
+                    "Name": "BOGO 50",
+                    "DiscountCode": "BOGO50",
+                    "AssociatedLineItems": [
+                      1
+                    ]
+                  }
+                ],
+                "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                "BillingAddressId": "1e93b1bc-ecf7-46f5-8be4-e20284e0df36",
+                "ShippingAddressId": "8f49e60a-5714-4fd2-9d68-223114227011",
+                "PrintableId": "229045",
+                "DropshipOrderId": "77797903-46B4-4D33-BCDD-1D0348515F39",
+                "UserId": 4349
+              },
+              "Customer": {
+                "PrimaryName": "Princess",
+                "MiddleName": "Ella",
+                "FamilyName": "Jasmine",
+                "AlternateName": "Jas",
+                "CustomerTypeId": 2,
+                "DateOfBirth": "1952-07-23T12:00:00.000",
+                "Disabled": false,
+                "DoNotContact": true,
+                "Notes": "Interested in iPhone 6",
+                "Title": "Ms"
+              },
+              "BillingAddress": {
+                "AddressTypeId": 2,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              },
+              "ShippingAddress": {
+                "AddressTypeId": 3,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              }
+            },
+            "customerRemoteID": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+            "shippingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "shippingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd",
+            "billingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "billingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://orderdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
-              "method": "POST",
+              "baseUri": "https://catalogsdemo.iqmetrix.net/v1",
+              "uri": "/Companies(23813)/Catalog/Items/ByVendorSku?vendorsku=00001&vendorid=14107",
+              "method": "GET",
               "replyHeaders": {},
               "statusCode": 400,
               "responsePayload": {}
             }
           ],
           "channelProfile": {
-            "salesOrderBusinessReferences": ["orderid"]
+            "salesOrderBusinessReferences": ["DropshipOrder.TenderId"]
           }
         },
         {
           "ncStatusCode": 429,
           "payload": {
-            "doc": {}
+            "doc": {
+              "DropshipOrder": {
+                "Name": "iPhone 5 Order",
+                "BillingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "BillingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "DiscountAmount": 15,
+                "DiscountCode": "MTRY-15",
+                "DiscountDescription": "Military discount",
+                "EmployeeId": 15,
+                "EntityId": 23841,
+                "OrderExpiryHours": 20,
+                "OrderTypeId": 3,
+                "ShippingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "ShippingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "ShippingEntityId": 23841,
+                "State": "Created",
+                "TenderId": "INV112",
+                "Items": [
+                  {
+                    "Cost": 5.99,
+                    "Description": "Samsung Galaxy S4 Standard Battery",
+                    "ItemStatusId": 1,
+                    "ItemTypeId": "1",
+                    "Index": 0,
+                    "ListPrice": 12.99,
+                    "Notes": "Dented corner",
+                    "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "Quantity": 2,
+                    "SellingPrice": 9.99,
+                    "SerialNumbers": [
+                      "abc321"
+                    ],
+                    "SKU": "00001",
+                    "ShippingOptionId": "1",
+                    "SupplierEntityId": 14107,
+                    "SupplierReference": "10",
+                    "TrackingInformation": [
+                      {
+                        "Quantity": 1,
+                        "TrackingNumber": "1TTTTN4421"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "SalesOrder": {
+                "DateCreatedUtc": "2018-01-04T16:00:00",
+                "LocationId": 23841,
+                "CustomerId": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+                "Items": [
+                  {
+                    "LineNumber": 1,
+                    "ItemType": "InStock",
+                    "Quantity": 1,
+                    "ProductCatalogId": "55c8b270-63b9-a095-d975-9a730b3dacb4",
+                    "CorrelationId": "00001",
+                    "SupplierEntityId": 14107,
+                    "Price": 99.98,
+                    "PricingTermId": 2,
+                    "TaxLineItems": [
+                      {
+                        "IqTaxServiceId": "fe73a2fd-1751-42a9-ac3d-d9d10e1317a4"
+                      }
+                    ]
+                  }
+                ],
+                "Payments": [
+                  {
+                    "Id": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                    "Amount": 100.2,
+                    "AuthCode": "VISA_253189",
+                    "TransactionNumber": "DSX-39718",
+                    "Token": "OslkhrXM",
+                    "PaymentMethodId": "3500899B-22BB-426D-B642-1C0D6552D0AB",
+                    "CorrelationId": "DSX-87924"
+                  }
+                ],
+                "DiscountLineItems": [
+                  {
+                    "LineNumber": 1,
+                    "Amount": 9,
+                    "Name": "BOGO 50",
+                    "DiscountCode": "BOGO50",
+                    "AssociatedLineItems": [
+                      1
+                    ]
+                  }
+                ],
+                "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                "BillingAddressId": "1e93b1bc-ecf7-46f5-8be4-e20284e0df36",
+                "ShippingAddressId": "8f49e60a-5714-4fd2-9d68-223114227011",
+                "PrintableId": "229045",
+                "DropshipOrderId": "77797903-46B4-4D33-BCDD-1D0348515F39",
+                "UserId": 4349
+              },
+              "Customer": {
+                "PrimaryName": "Princess",
+                "MiddleName": "Ella",
+                "FamilyName": "Jasmine",
+                "AlternateName": "Jas",
+                "CustomerTypeId": 2,
+                "DateOfBirth": "1952-07-23T12:00:00.000",
+                "Disabled": false,
+                "DoNotContact": true,
+                "Notes": "Interested in iPhone 6",
+                "Title": "Ms"
+              },
+              "BillingAddress": {
+                "AddressTypeId": 2,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              },
+              "ShippingAddress": {
+                "AddressTypeId": 3,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              }
+            },
+            "customerRemoteID": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+            "shippingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "shippingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd",
+            "billingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "billingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://orderdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
-              "method": "POST",
+              "baseUri": "https://catalogsdemo.iqmetrix.net/v1",
+              "uri": "/Companies(23813)/Catalog/Items/ByVendorSku?vendorsku=00001&vendorid=14107",
+              "method": "GET",
               "replyHeaders": {},
               "statusCode": 429,
               "responsePayload": {}
             }
           ],
           "channelProfile": {
-            "salesOrderBusinessReferences": ["orderid"]
+            "salesOrderBusinessReferences": ["DropshipOrder.TenderId"]
           }
         },
         {
           "ncStatusCode": 500,
           "payload": {
-            "doc": {}
+            "doc": {
+              "DropshipOrder": {
+                "Name": "iPhone 5 Order",
+                "BillingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "BillingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "DiscountAmount": 15,
+                "DiscountCode": "MTRY-15",
+                "DiscountDescription": "Military discount",
+                "EmployeeId": 15,
+                "EntityId": 23841,
+                "OrderExpiryHours": 20,
+                "OrderTypeId": 3,
+                "ShippingAddressId": "a08b0640-606a-41f0-901a-facaf50e75dd",
+                "ShippingCustomerId": "659c2a38-d083-4421-9330-46d779702f85",
+                "ShippingEntityId": 23841,
+                "State": "Created",
+                "TenderId": "INV112",
+                "Items": [
+                  {
+                    "Cost": 5.99,
+                    "Description": "Samsung Galaxy S4 Standard Battery",
+                    "ItemStatusId": 1,
+                    "ItemTypeId": "1",
+                    "Index": 0,
+                    "ListPrice": 12.99,
+                    "Notes": "Dented corner",
+                    "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
+                    "Quantity": 2,
+                    "SellingPrice": 9.99,
+                    "SerialNumbers": [
+                      "abc321"
+                    ],
+                    "SKU": "00001",
+                    "ShippingOptionId": "1",
+                    "SupplierEntityId": 14107,
+                    "SupplierReference": "10",
+                    "TrackingInformation": [
+                      {
+                        "Quantity": 1,
+                        "TrackingNumber": "1TTTTN4421"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "SalesOrder": {
+                "DateCreatedUtc": "2018-01-04T16:00:00",
+                "LocationId": 23841,
+                "CustomerId": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+                "Items": [
+                  {
+                    "LineNumber": 1,
+                    "ItemType": "InStock",
+                    "Quantity": 1,
+                    "ProductCatalogId": "55c8b270-63b9-a095-d975-9a730b3dacb4",
+                    "CorrelationId": "00001",
+                    "SupplierEntityId": 14107,
+                    "Price": 99.98,
+                    "PricingTermId": 2,
+                    "TaxLineItems": [
+                      {
+                        "IqTaxServiceId": "fe73a2fd-1751-42a9-ac3d-d9d10e1317a4"
+                      }
+                    ]
+                  }
+                ],
+                "Payments": [
+                  {
+                    "Id": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                    "Amount": 100.2,
+                    "AuthCode": "VISA_253189",
+                    "TransactionNumber": "DSX-39718",
+                    "Token": "OslkhrXM",
+                    "PaymentMethodId": "3500899B-22BB-426D-B642-1C0D6552D0AB",
+                    "CorrelationId": "DSX-87924"
+                  }
+                ],
+                "DiscountLineItems": [
+                  {
+                    "LineNumber": 1,
+                    "Amount": 9,
+                    "Name": "BOGO 50",
+                    "DiscountCode": "BOGO50",
+                    "AssociatedLineItems": [
+                      1
+                    ]
+                  }
+                ],
+                "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
+                "BillingAddressId": "1e93b1bc-ecf7-46f5-8be4-e20284e0df36",
+                "ShippingAddressId": "8f49e60a-5714-4fd2-9d68-223114227011",
+                "PrintableId": "229045",
+                "DropshipOrderId": "77797903-46B4-4D33-BCDD-1D0348515F39",
+                "UserId": 4349
+              },
+              "Customer": {
+                "PrimaryName": "Princess",
+                "MiddleName": "Ella",
+                "FamilyName": "Jasmine",
+                "AlternateName": "Jas",
+                "CustomerTypeId": 2,
+                "DateOfBirth": "1952-07-23T12:00:00.000",
+                "Disabled": false,
+                "DoNotContact": true,
+                "Notes": "Interested in iPhone 6",
+                "Title": "Ms"
+              },
+              "BillingAddress": {
+                "AddressTypeId": 2,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              },
+              "ShippingAddress": {
+                "AddressTypeId": 3,
+                "AttentionTo": "Princess",
+                "CountryCode": "CA",
+                "Default": false,
+                "DoNotContact": true,
+                "Email": "Jas@princess.ca",
+                "Locality": "Mountain View",
+                "Notes": "Moved as of April 15 2015",
+                "Phone": "(555) 555-5555",
+                "PostalCode": "94043",
+                "PostOfficeBoxNumber": "P.O. Box 1022",
+                "StateCode": "AB",
+                "StreetAddress1": "1600 Amphitheatre Pkwy",
+                "StreetAddress2": "Suite 500"
+              }
+            },
+            "customerRemoteID": "a61ebc5a-b85f-66a3-dec3-260637dd796c",
+            "shippingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "shippingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd",
+            "billingCustomerRemoteID": "659c2a38-d083-4421-9330-46d779702f85",
+            "billingAddressRemoteID": "a08b0640-606a-41f0-901a-facaf50e75dd"
           },
-          "baseUri": "https://localhost",
+          "baseUri": "https://orderdemo.iqmetrix.net/v1",
           "defaultHeaders": {},
           "links": [
             {
-              "uri": "/",
-              "method": "POST",
+              "baseUri": "https://catalogsdemo.iqmetrix.net/v1",
+              "uri": "/Companies(23813)/Catalog/Items/ByVendorSku?vendorsku=00001&vendorid=14107",
+              "method": "GET",
               "replyHeaders": {},
               "statusCode": 500,
               "responsePayload": {}
             }
           ],
           "channelProfile": {
-            "salesOrderBusinessReferences": ["orderid"]
+            "salesOrderBusinessReferences": ["DropshipOrder.TenderId"]
           }
         }
       ]
