@@ -269,12 +269,12 @@
               },
               "required": [
                 "LineNumber",
-                "ProductCatalogId",
                 "Quantity",
                 "Price",
                 "ItemType",
                 "CorrelationId",
-                "TaxLineItems"
+                "TaxLineItems",
+                "SupplierEntityId"
               ]
             }
           },
@@ -456,7 +456,6 @@
           "CustomerId",
           "Items",
           "Payments",
-          "TaxCalculationResultId",
           "PrintableId",
           "DropshipOrderId"
         ]
@@ -925,7 +924,9 @@
         ],
         "required": [
           "ItemStatusId",
-          "ItemTypeId"
+          "ItemTypeId",
+          "SupplierEntityId",
+          "SKU"
         ]
       },
       "DropshipOrderItemBase": {
@@ -1183,6 +1184,7 @@
   },
   "tags": [
     "Put",
+    "Order",
     "SalesOrder"
   ],
   "audit": {}
