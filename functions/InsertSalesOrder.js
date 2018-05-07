@@ -38,7 +38,7 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
     }
 
     async function validateFunction() {
-        if (stub.message.length === 0) {
+        if (stub.messages.length === 0) {
             if (!nc.isNonEmptyString(stub.channelProfile.channelSettingsValues.canPostInvoice)) {
                 stub.messages.push(
                     `The channelProfile.channelSettingsValues.canPostInvoice string is ${
@@ -105,24 +105,26 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
         });
 
         logInfo("Getting product catalog ids...");
-        catalog.forEach(cat => {
-            cat.catalogId = getItemId(cat.vendorSku, cat.supplierId);
-        });
+        //catalog.forEach(async cat => {
+        //    cat.catalogId = await getItemId(cat.vendorSku, cat.supplierId);
+        //});
+
+        const catalogIds = await Promise.all(catalog.map(getItemId));
 
         stub.payload.doc.DropshipOrder.Items.forEach(item => {
-            item.ProductId = catalog.find(
+            item.ProductId = catalogIds.find(
                 cat => cat.vendorSku === item.SKU && cat.supplierId === item.SupplierEntityId
             ).catalogId;
         });
         stub.payload.doc.SalesOrder.Items.forEach(item => {
-            item.ProductCatalogId = catalog.find(
+            item.ProductCatalogId = catalogIds.find(
                 cat => cat.vendorSku === item.CorrelationId && cat.supplierId === item.SupplierEntityId
             ).catalogId;
         });
     }
 
-    async function getItemId(items, vendorSku, supplierId) {
-        const response = await stub.request.get({
+    async function getItemId({ vendorSku, supplierId }) {
+        const itemResponse = await stub.request.get({
             url: `https://catalogs${stub.channelProfile.channelSettingsValues.environment}.iqmetrix.net/v1/Companies(${
                 stub.channelProfile.channelAuthValues.company_id
             })/Catalog/Items/ByVendorSku`,
@@ -132,26 +134,30 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
             }
         });
 
-        if (nc.isArray(response.body.Items) && response.body.Items.length > 0) {
-            if (response.body.Items.length === 1) {
+        if (nc.isArray(itemResponse.body.Items) && itemResponse.body.Items.length > 0) {
+            if (itemResponse.body.Items.length === 1) {
                 logInfo(
-                    `Found catalog id '${response.body.Items[0].CatalogItemId}' for vendorSku = '${
-                        item.SKU
-                    }' supplierId = '${item.SupplierEntityId}'`
+                    `Found catalog id '${
+                        itemResponse.body.Items[0].CatalogItemId
+                    }' for vendorSku = '${vendorSku}' supplierId = '${supplierId}'`
                 );
-                return response.body.Items[0].CatalogItemId;
+                return {
+                    catalogId: itemResponse.body.Items[0].CatalogItemId,
+                    vendorSku: vendorSku,
+                    supplierId: supplierId
+                };
             } else {
                 throw new Error(
-                    `Found multiple catalog ids for vendorSku = '${item.SKU}' supplierId = '${
-                        item.SupplierEntityId
-                    }'.  Response: ${response.body}`
+                    `Found multiple catalog ids for vendorSku = '${vendorSku}' supplierId = '${supplierId}'.  Response: ${
+                        itemResponse.body
+                    }`
                 );
             }
         } else {
             throw new Error(
-                `Unable to find catalog id for vendorSku = '${item.SKU}' and supplierId = '${
-                    item.SupplierEntityId
-                }'.  Response: ${response.body}`
+                `Unable to find catalog id for vendorSku = '${vendorSku}' and supplierId = '${supplierId}'.  Response: ${
+                    itemResponse.body
+                }`
             );
         }
     }
@@ -178,7 +184,7 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
             response.process = await stub.request.post({
                 url: `https://order${stub.channelProfile.channelSettingsValues.environment}.iqmetrix.net/v1/Companies(${
                     stub.channelProfile.channelAuthValues.company_id
-                })/Orders(${response.body.Id})/Process`,
+                })/Orders(${response.dropship.body.Id})/Process`,
                 body: {
                     OrderId: response.dropship.body.Id
                 }
@@ -193,7 +199,7 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
     async function postSalesOrder() {
         try {
             logInfo("Posting sales order...");
-            sub.payload.doc.SalesOrder.DropshipOrderId = response.dropship.body.Id;
+            stub.payload.doc.SalesOrder.DropshipOrderId = response.dropship.body.Id;
             response.salesOrder = await stub.request.post({
                 url: `https://salesorder${
                     stub.channelProfile.channelSettingsValues.environment
