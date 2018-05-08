@@ -561,6 +561,15 @@
             "title": "Max number of parallel requests",
             "type": "integer"
           },
+          "canPostInvoice": {
+            "title": "canPostInvoice",
+            "description": "POST a Sales Order and Create an Invoice in RQ (SaleInvoice).  OR Submit a Sales Order with No Invoice (SaleOrder).",
+            "type": "string",
+            "enum": [
+              "SaleInvoice",
+              "SaleOrder"
+            ]
+          },
           "subscriptionLists": {
             "title": "Subscription Lists",
             "type": "array",
@@ -589,6 +598,7 @@
           "implFolderName",
           "environment",
           "maxParallelRequests",
+          "canPostInvoice",
           "subscriptionLists"
         ]
       },
@@ -596,6 +606,7 @@
         "protocol",
         "environment",
         "maxParallelRequests",
+        "canPostInvoice",
         "subscriptionLists"
       ],
       "configValues": {
