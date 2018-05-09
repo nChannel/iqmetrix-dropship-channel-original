@@ -26,77 +26,7 @@
       },
       "documentDef": {
         "schema": {},
-        "referenceLocation": {"productGroupBusinessReferences": [""]}
-      }
-    },
-    {
-      "name": "PUT PRODUCTGROUP",
-      "description": "PUT PRODUCTGROUP",
-      "channelVerb": "PUT",
-      "channelNoun": "PRODUCTGROUP",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configValues" : {
-          "doPutProductPricingFlag": false,
-          "doPutProductQuantityFlag": false,
-          "doPutProductFlag": false,
-          "canUpdateProductPricingFlag": false,
-          "canUpdateProductQuantityFlag": false,
-          "canUpdateProductFlag": false,
-          "canUpdateProductGroupFlag" : true
-        },
-        "configView" : [
-          "canUpdateProductGroupFlag"
-        ],
-        "configModel" : {
-          "required" : [
-            "doPutProductPricingFlag",
-            "doPutProductQuantityFlag",
-            "doPutProductFlag",
-            "canUpdateProductPricingFlag",
-            "canUpdateProductQuantityFlag",
-            "canUpdateProductFlag",
-            "canUpdateProductGroupFlag"
-          ],
-          "properties" : {
-            "doPutProductPricingFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, doPutProductPricingFlag"
-            },
-            "doPutProductQuantityFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, doPutProductQuantityFlag"
-            },
-            "doPutProductFlag" : {
-              "type" : "boolean",
-              "title" : "PUT ProductGroup, doPutProductFlag"
-            },
-            "canUpdateProductPricingFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, canUpdateProductPricingFlag"
-            },
-            "canUpdateProductQuantityFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, canUpdateProductQuantityFlag"
-            },
-            "canUpdateProductFlag" : {
-              "type" : "boolean",
-              "title" : "PUT ProductGroup, canUpdateProductFlag"
-            },
-            "canUpdateProductGroupFlag" : {
-              "type" : "boolean",
-              "title" : "PUT ProductGroup, canUpdateProductGroupFlag"
-            }
-          },
-          "type" : "object"
-        }
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {"productGroupBusinessReferences": [""]}
+        "referenceLocation": {"productGroupBusinessReferences": ["VendorSku.Value"]}
       }
     },
     {
@@ -115,65 +45,7 @@
       },
       "documentDef": {
         "schema": {},
-        "referenceLocation": {"productBusinessReferences": [""]}
-      }
-    },
-    {
-      "name": "PUT PRODUCT",
-      "description": "PUT PRODUCT",
-      "channelVerb": "PUT",
-      "channelNoun": "PRODUCT",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configValues" : {
-          "doPutProductPricingFlag": false,
-          "doPutProductQuantityFlag": false,
-          "canUpdateProductPricingFlag": false,
-          "canUpdateProductQuantityFlag": false,
-          "canUpdateProductFlag": true
-        },
-        "configView" : [
-          "canUpdateProductFlag"
-        ],
-        "configModel" : {
-          "required" : [
-            "doPutProductPricingFlag",
-            "doPutProductQuantityFlag",
-            "canUpdateProductPricingFlag",
-            "canUpdateProductQuantityFlag",
-            "canUpdateProductFlag"
-          ],
-          "properties" : {
-            "doPutProductPricingFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, doPutProductPricingFlag"
-            },
-            "doPutProductQuantityFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, doPutProductQuantityFlag"
-            },
-            "canUpdateProductPricingFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, canUpdateProductPricingFlag"
-            },
-            "canUpdateProductQuantityFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, canUpdateProductQuantityFlag"
-            },
-            "canUpdateProductFlag" : {
-              "type" : "boolean",
-              "title" : "PUT Product, canUpdateProductFlag"
-            }
-          },
-          "type" : "object"
-        }
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {"productBusinessReferences": [""]}
+        "referenceLocation": {"productBusinessReferences": ["VendorSku.Value"]}
       }
     },
     {
@@ -196,38 +68,6 @@
       }
     },
     {
-      "name": "PUT PRODUCTPRICING",
-      "description": "PUT PRODUCTPRICING",
-      "channelVerb": "PUT",
-      "channelNoun": "PRODUCTPRICING",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configValues" : {
-          "canUpdateProductPricingFlag": true
-        },
-        "configView" : [],
-        "configModel" : {
-          "required" : [
-            "canUpdateProductPricingFlag"
-          ],
-          "properties" : {
-            "canUpdateProductPricingFlag" : {
-              "type" : "boolean",
-              "title" : "PUT ProductPricing, canUpdateProductPricingFlag"
-            }
-          },
-          "type" : "object"
-        }
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {"productPricingBusinessReferences": [""]}
-      }
-    },
-    {
       "name": "GET PRODUCTQUANTITY",
       "description": "GET PRODUCTQUANTITY",
       "channelVerb": "GET",
@@ -244,57 +84,6 @@
       "documentDef": {
         "schema": {},
         "referenceLocation": {"productQuantityBusinessReferences": ["VendorSku.Value"]}
-      }
-    },
-    {
-      "name": "PUT PRODUCTQUANTITY",
-      "description": "PUT PRODUCTQUANTITY",
-      "channelVerb": "PUT",
-      "channelNoun": "PRODUCTQUANTITY",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configValues" : {
-          "canUpdateProductQuantityFlag": true
-        },
-        "configView" : [],
-        "configModel" : {
-          "required" : [
-            "canUpdateProductQuantityFlag"
-          ],
-          "properties" : {
-            "canUpdateProductQuantityFlag" : {
-              "type" : "boolean",
-              "title" : "PUT ProductQuantity, canUpdateProductQuantityFlag"
-            }
-          },
-          "type" : "object"
-        }
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {"productQuantityBusinessReferences": [""]}
-      }
-    },
-    {
-      "name": "GET SALESORDER",
-      "description": "GET SALESORDER",
-      "channelVerb": "GET",
-      "channelNoun": "SALESORDER",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configModel": {},
-        "configView": [],
-        "configValues": {}
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {"salesOrderBusinessReferences": [""]}
       }
     },
     {
@@ -332,43 +121,6 @@
       }
     },
     {
-      "name": "PUT FULFILLMENT",
-      "description": "PUT FULFILLMENT",
-      "channelVerb": "PUT",
-      "channelNoun": "FULFILLMENT",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configValues" : {
-          "canUpdateFulfillmentFlag" : false
-        },
-        "configView" : [
-          "canUpdateFulfillmentFlag"
-        ],
-        "configModel" : {
-          "required": [
-            "canUpdateFulfillmentFlag"
-          ],
-          "properties": {
-            "canUpdateFulfillmentFlag": {
-              "type": "boolean",
-              "title": "PUT Fulfillment, canUpdateFulfillmentFlag"
-            }
-          },
-          "type": "object"
-        }
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {
-          "fulfillmentBusinessReferences": [""],
-          "salesOrderBusinessReferences": [""]
-        }
-      }
-    },
-    {
       "name": "GET FULFILLMENT",
       "description": "GET FULFILLMENT",
       "channelVerb": "GET",
@@ -388,25 +140,6 @@
           "fulfillmentBusinessReferences": ["id"],
           "salesOrderBusinessReferences": ["invoiceNumber"]
         }
-      }
-    },
-    {
-      "name": "GET CUSTOMER",
-      "description": "GET CUSTOMER",
-      "channelVerb": "GET",
-      "channelNoun": "CUSTOMER",
-      "ruleDef": {
-        "ruleSchema": {},
-        "defaultRuleValues": {}
-      },
-      "configDef": {
-        "configModel": {},
-        "configView": [],
-        "configValues": {}
-      },
-      "documentDef": {
-        "schema": {},
-        "referenceLocation": {"customerBusinessReferences": ["UniqueIdentifier"]}
       }
     },
     {
