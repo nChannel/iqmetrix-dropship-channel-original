@@ -192,6 +192,7 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
             logInfo(`Successfully processed dropship order (id = ${response.process.body.Id}).`);
         } catch (error) {
             logError("Error processing dropship order.");
+            stub.out.ncStatusCode = 500;
             throw error;
         }
     }
@@ -211,6 +212,7 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
             logInfo(`Successfully posted sales order (id = ${response.salesOrder.body.Id}).`);
         } catch (error) {
             logError("Error posting sales order.");
+            stub.out.ncStatusCode = 500;
             throw error;
         }
     }
@@ -230,13 +232,17 @@ function InsertSalesOrder(ncUtil, channelProfile, flowContext, payload, callback
         if (error.name === "StatusCodeError") {
             stub.out.response.endpointStatusCode = error.statusCode;
             stub.out.response.endpointStatusMessage = error.message;
-            if (error.statusCode >= 500) {
-                stub.out.ncStatusCode = 500;
-            } else if (error.statusCode === 429) {
-                logWarn("Request was throttled.");
-                stub.out.ncStatusCode = 429;
-            } else {
-                stub.out.ncStatusCode = 400;
+            if (!stub.out.ncStatusCode){
+                if (error.statusCode >= 500) {
+                    stub.out.ncStatusCode = 500;
+                }
+                else if (error.statusCode === 429) {
+                    logWarn("Request was throttled.");
+                    stub.out.ncStatusCode = 429;
+                }
+                else {
+                    stub.out.ncStatusCode = 400;
+                }
             }
         }
         stub.out.payload.error = error;
