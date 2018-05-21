@@ -53,8 +53,8 @@ function UpdateCustomer(ncUtil, channelProfile, flowContext, payload, callback) 
         const customer = response.body;
         stub.out.response.endpointStatusCode = response.statusCode;
         stub.out.ncStatusCode = response.statusCode;
-        out.payload.customerRemoteID = customer.Id;
-        out.payload.customerBusinessReference = nc.extractBusinessReferences(
+        stub.out.payload.customerRemoteID = customer.Id;
+        stub.out.payload.customerBusinessReference = nc.extractBusinessReferences(
             stub.channelProfile.customerBusinessReferences,
             customer
         );

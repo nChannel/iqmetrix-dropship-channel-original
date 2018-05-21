@@ -190,7 +190,7 @@ function GetProductMatrixFromQuery(ncUtil, channelProfile, flowContext, payload,
                     doc: product,
                     productMatrixRemoteID: product.CatalogItemId,
                     productMatrixBusinessReference: nc.extractBusinessReferences(
-                        productMatrixBusinessReferences,
+                        stub.channelProfile.productMatrixBusinessReferences,
                         product
                     )
                 });

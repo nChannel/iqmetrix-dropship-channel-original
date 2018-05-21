@@ -9,6 +9,7 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
         .then(getProductDetails)
         .then(filterVendors)
         .then(getAvailability)
+
         //.then(keepModifiedItems) // The necessary timestamp is not yet being returned by the iQmetrix API
         .then(buildResponseObject)
         .catch(handleError)
@@ -200,14 +201,14 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
                     doc: product,
                     productQuantityRemoteID: product.CatalogItemId,
                     productQuantityBusinessReference: nc.extractBusinessReferences(
-                        productQuantityBusinessReferences,
+                        stub.channelProfile.productQuantityBusinessReferences,
                         product
                     )
                 });
             });
         } else {
             logInfo("No product quantities have been modified.");
-            out.ncStatusCode = 204;
+            stub.out.ncStatusCode = 204;
         }
     }
 

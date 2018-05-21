@@ -190,7 +190,7 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
                     doc: product,
                     productSimpleRemoteID: product.CatalogItemId,
                     productSimpleBusinessReference: nc.extractBusinessReferences(
-                        productSimpleBusinessReferences,
+                        stub.channelProfile.productSimpleBusinessReferences,
                         product
                     )
                 });

@@ -54,7 +54,7 @@ function UpdateCustomerContact(ncUtil, channelProfile, flowContext, payload, cal
         stub.out.response.endpointStatusCode = response.statusCode;
         stub.out.ncStatusCode = response.statusCode;
         stub.out.payload.customerContactRemoteID = customerContactMethod.Id;
-        out.payload.customerContactBusinessReference = nc.extractBusinessReferences(
+        stub.out.payload.customerContactBusinessReference = nc.extractBusinessReferences(
             stub.channelProfile.customerContactBusinessReferences,
             customerContactMethod
         );

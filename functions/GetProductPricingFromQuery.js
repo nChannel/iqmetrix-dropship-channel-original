@@ -9,6 +9,7 @@ function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload
         .then(getProductDetails)
         .then(filterVendors)
         .then(getPrices)
+
         //.then(keepModifiedItems) // The necessary timestamp is not yet being returned by the iQmetrix API
         .then(buildResponseObject)
         .catch(handleError)
@@ -220,7 +221,7 @@ function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload
                     doc: product,
                     productPricingRemoteID: product.CatalogItemId,
                     productPricingBusinessReference: nc.extractBusinessReferences(
-                        productPricingBusinessReferences,
+                        stub.channelProfileproductPricingBusinessReferences,
                         product
                     )
                 });

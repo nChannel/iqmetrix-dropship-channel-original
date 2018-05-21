@@ -54,7 +54,7 @@ function UpdateCustomerAddress(ncUtil, channelProfile, flowContext, payload, cal
         stub.out.response.endpointStatusCode = response.statusCode;
         stub.out.ncStatusCode = response.statusCode;
         stub.out.payload.customerAddressRemoteID = customerAddress.Id;
-        out.payload.customerAddressBusinessReference = nc.extractBusinessReferences(
+        stub.out.payload.customerAddressBusinessReference = nc.extractBusinessReferences(
             stub.channelProfile.customerAddressBusinessReferences,
             customerAddress
         );
