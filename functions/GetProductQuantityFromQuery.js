@@ -9,8 +9,7 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
         .then(getProductDetails)
         .then(filterVendors)
         .then(getAvailability)
-
-        //.then(keepModifiedItems) // The necessary timestamp is not yet being returned by the iQmetrix API
+        .then(keepModifiedItems)
         .then(buildResponseObject)
         .catch(handleError)
         .then(() => callback(stub.out))
@@ -182,7 +181,7 @@ function GetProductQuantityFromQuery(ncUtil, channelProfile, flowContext, payloa
         const start = Date.parse(stub.payload.doc.modifiedDateRange.startDateGMT);
         const end = Date.parse(stub.payload.doc.modifiedDateRange.endDateGMT);
         const products = productList.filter(product => {
-            const skuMod = Date.parse(product.SupplierSku.DateUpdatedUtc);
+            const skuMod = Date.parse(product.SupplierSku.LastModifiedDateUtc);
             return skuMod >= start && skuMod <= end;
         });
         logInfo(

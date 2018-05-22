@@ -3678,9 +3678,7 @@
                     "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
                     "Quantity": 2,
                     "SellingPrice": 9.99,
-                    "SerialNumbers": [
-                      "abc321"
-                    ],
+                    "SerialNumbers": ["abc321"],
                     "SKU": "00001",
                     "ShippingOptionId": "1",
                     "SupplierEntityId": 14107,
@@ -3732,9 +3730,7 @@
                     "Amount": 9,
                     "Name": "BOGO 50",
                     "DiscountCode": "BOGO50",
-                    "AssociatedLineItems": [
-                      1
-                    ]
+                    "AssociatedLineItems": [1]
                   }
                 ],
                 "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
@@ -3816,9 +3812,7 @@
                     "IsArchived": false,
                     "RmsId": "1",
                     "Slug": "M1248-V1",
-                    "SourceIds": [
-                      "43d92a51-650e-4b85-b5d0-8d51bf4c59f4"
-                    ]
+                    "SourceIds": ["43d92a51-650e-4b85-b5d0-8d51bf4c59f4"]
                   }
                 ]
               }
@@ -3865,9 +3859,7 @@
                     "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
                     "Quantity": 2,
                     "SellingPrice": 9.99,
-                    "SerialNumbers": [
-                      "abc321"
-                    ],
+                    "SerialNumbers": ["abc321"],
                     "SKU": "00001",
                     "ShippingOptionId": "1",
                     "SupplierEntityId": 14107,
@@ -3928,7 +3920,7 @@
                 "Payments": [
                   {
                     "Id": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
-                    "Amount": 100.20,
+                    "Amount": 100.2,
                     "AuthCode": "VISA_253189",
                     "TransactionNumber": "DSX-39718",
                     "Token": "OslkhrXM",
@@ -3949,9 +3941,7 @@
                     "Amount": 9.99,
                     "CorrelationId": "6716053127",
                     "RetailerCatalogId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
-                    "AssociatedLineItems": [
-                      1
-                    ]
+                    "AssociatedLineItems": [1]
                   }
                 ],
                 "DiscountLineItems": [
@@ -3960,9 +3950,7 @@
                     "Amount": 2.99,
                     "Name": "BOGO 50",
                     "DiscountCode": "M5512323DD1",
-                    "AssociatedLineItems": [
-                      1
-                    ],
+                    "AssociatedLineItems": [1],
                     "RetailerCatalogId": "a183f1a9-c58f-426a-930a-9a6357db52ed"
                   }
                 ]
@@ -4005,9 +3993,7 @@
                     "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
                     "Quantity": 2,
                     "SellingPrice": 9.99,
-                    "SerialNumbers": [
-                      "abc321"
-                    ],
+                    "SerialNumbers": ["abc321"],
                     "SKU": "00001",
                     "ShippingOptionId": "1",
                     "SupplierEntityId": 14107,
@@ -4059,9 +4045,7 @@
                     "Amount": 9,
                     "Name": "BOGO 50",
                     "DiscountCode": "BOGO50",
-                    "AssociatedLineItems": [
-                      1
-                    ]
+                    "AssociatedLineItems": [1]
                   }
                 ],
                 "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
@@ -4170,9 +4154,7 @@
                     "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
                     "Quantity": 2,
                     "SellingPrice": 9.99,
-                    "SerialNumbers": [
-                      "abc321"
-                    ],
+                    "SerialNumbers": ["abc321"],
                     "SKU": "00001",
                     "ShippingOptionId": "1",
                     "SupplierEntityId": 14107,
@@ -4224,9 +4206,7 @@
                     "Amount": 9,
                     "Name": "BOGO 50",
                     "DiscountCode": "BOGO50",
-                    "AssociatedLineItems": [
-                      1
-                    ]
+                    "AssociatedLineItems": [1]
                   }
                 ],
                 "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
@@ -4335,9 +4315,7 @@
                     "ProductId": "a183f1a9-c58f-426a-930a-9a6357db52ed",
                     "Quantity": 2,
                     "SellingPrice": 9.99,
-                    "SerialNumbers": [
-                      "abc321"
-                    ],
+                    "SerialNumbers": ["abc321"],
                     "SKU": "00001",
                     "ShippingOptionId": "1",
                     "SupplierEntityId": 14107,
@@ -4389,9 +4367,7 @@
                     "Amount": 9,
                     "Name": "BOGO 50",
                     "DiscountCode": "BOGO50",
-                    "AssociatedLineItems": [
-                      1
-                    ]
+                    "AssociatedLineItems": [1]
                   }
                 ],
                 "TaxCalculationResultId": "e4b25c1b-876a-4c13-b562-c3ba1ac33a76",
@@ -6216,7 +6192,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "144859f4-e8a0-4367-afcb-a9d39c94fa8f",
                   "RegularPrice": 199.99,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6233,7 +6210,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "a61887ce-db07-4c1d-a24e-d23fddae65c6",
                   "RegularPrice": 99.95,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6250,7 +6228,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "749447b5-5969-42af-8f9f-a8a712626732",
                   "RegularPrice": 34.99,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6267,7 +6246,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "a8c1c049-5dce-453f-b0cb-aacb14ada7b4",
                   "RegularPrice": 99.95,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6284,7 +6264,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "4773c97f-bbb8-4063-8de4-d7242a6a5933",
                   "RegularPrice": 34.99,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6301,7 +6282,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "49f57d8e-a170-458a-91f6-e9ee06c28b37",
                   "RegularPrice": 99.95,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             }
@@ -6462,7 +6444,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "144859f4-e8a0-4367-afcb-a9d39c94fa8f",
                   "RegularPrice": 199.99,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6479,7 +6462,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "a61887ce-db07-4c1d-a24e-d23fddae65c6",
                   "RegularPrice": 99.95,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6496,7 +6480,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "749447b5-5969-42af-8f9f-a8a712626732",
                   "RegularPrice": 34.99,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6513,7 +6498,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "a8c1c049-5dce-453f-b0cb-aacb14ada7b4",
                   "RegularPrice": 99.95,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6530,7 +6516,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "4773c97f-bbb8-4063-8de4-d7242a6a5933",
                   "RegularPrice": 34.99,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6547,7 +6534,8 @@
                   "EntityId": 23813,
                   "CatalogItemId": "49f57d8e-a170-458a-91f6-e9ee06c28b37",
                   "RegularPrice": 99.95,
-                  "IsDiscountable": false
+                  "IsDiscountable": false,
+                  "DateUpdatedUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             }
@@ -6803,21 +6791,24 @@
                   "SupplierSku": "NCDM-0002",
                   "SupplierEntityId": 13939,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "5c55b733-a397-40b9-a2d7-fda07b23cb9b",
                   "SupplierSku": "NCDM-0009",
                   "SupplierEntityId": 13939,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "80cdafdf-ecad-42ee-8baf-18b07555b590",
                   "SupplierSku": "NCDM-0010",
                   "SupplierEntityId": 13939,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -6833,21 +6824,24 @@
                   "SupplierSku": "NCKH-0004",
                   "SupplierEntityId": 7190,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "9de13662-9733-4409-8c45-c1d8fd27666a",
                   "SupplierSku": "NCKH-0007",
                   "SupplierEntityId": 7190,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "d0074d45-838c-43a5-bb47-1172f8579e2a",
                   "SupplierSku": "NCKH-0008",
                   "SupplierEntityId": 7190,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             }
@@ -7007,21 +7001,24 @@
                   "SupplierSku": "NCDM-0002",
                   "SupplierEntityId": 13939,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "5c55b733-a397-40b9-a2d7-fda07b23cb9b",
                   "SupplierSku": "NCDM-0009",
                   "SupplierEntityId": 13939,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "80cdafdf-ecad-42ee-8baf-18b07555b590",
                   "SupplierSku": "NCDM-0010",
                   "SupplierEntityId": 13939,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             },
@@ -7037,21 +7034,24 @@
                   "SupplierSku": "NCKH-0004",
                   "SupplierEntityId": 7190,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "9de13662-9733-4409-8c45-c1d8fd27666a",
                   "SupplierSku": "NCKH-0007",
                   "SupplierEntityId": 7190,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 },
                 {
                   "Id": "d0074d45-838c-43a5-bb47-1172f8579e2a",
                   "SupplierSku": "NCKH-0008",
                   "SupplierEntityId": 7190,
                   "IsAvailable": true,
-                  "Quantity": 500
+                  "Quantity": 500,
+                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
                 }
               ]
             }

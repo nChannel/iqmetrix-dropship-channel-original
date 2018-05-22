@@ -9,8 +9,7 @@ function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload
         .then(getProductDetails)
         .then(filterVendors)
         .then(getPrices)
-
-        //.then(keepModifiedItems) // The necessary timestamp is not yet being returned by the iQmetrix API
+        .then(keepModifiedItems)
         .then(buildResponseObject)
         .catch(handleError)
         .then(() => callback(stub.out))
@@ -199,6 +198,8 @@ function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload
         return product;
     }
 
+     // The necessary timestamp is not yet being returned by the iQmetrix API,
+     // so it will never find any modified prices currently.
     async function keepModifiedItems(productList) {
         logInfo("Keep items whose quantity has been modified...");
         const start = Date.parse(stub.payload.doc.modifiedDateRange.startDateGMT);
@@ -207,7 +208,7 @@ function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload
             const priceMod = Date.parse(product.Pricing.DateUpdatedUtc);
             return priceMod >= start && priceMod <= end;
         });
-        logInfo(`${products.length} of ${productList.length} prices have been modified withing the given date range.`);
+        logInfo(`${products.length} of ${productList.length} prices have been modified within the given date range.`);
         return products;
     }
 
