@@ -31,7 +31,7 @@ function Stub(name, referenceLocations, ncUtil, channelProfile, flowContext, pay
     this.validatePayload();
 
     if (!isNonEmptyArray(this.messages)) {
-        this.request = require("request-promise-native").defaults({
+        this.request = require("request-promise").defaults({
             auth: {
                 bearer: this.channelProfile.channelAuthValues.access_token
             },
@@ -48,7 +48,7 @@ Stub.prototype.log = function log(msg, level = "info") {
     if (isNonEmptyString(this.name)) {
         prefix = `${prefix} ${this.name}`;
     }
-    console.log(`${prefix} | ${msg}`);
+    console.log(`${prefix} | ${msg}`); // eslint-disable-line no-console
 };
 
 Stub.prototype.validateNcUtil = function validateNcUtil() {
