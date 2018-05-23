@@ -6781,7 +6781,8 @@
             },
             {
               "baseUri": "https://availabilitydemo.iqmetrix.net",
-              "uri": "/v1/Suppliers(13939)/Companies(23813)/SupplierSkus",
+              "uri":
+                "/v1/Suppliers(13939)/Companies(23813)/SupplierSkus?%24filter=LastModifiedDateUtc%20ge%20datetime%272010-03-08T00%3A28%3A44.183Z%27%20and%20LastModifiedDateUtc%20le%20datetime%272019-03-08T00%3A28%3A44.183Z%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -6814,7 +6815,8 @@
             },
             {
               "baseUri": "https://availabilitydemo.iqmetrix.net",
-              "uri": "/v1/Suppliers(7190)/Companies(23813)/SupplierSkus",
+              "uri":
+                "/v1/Suppliers(7190)/Companies(23813)/SupplierSkus?%24filter=LastModifiedDateUtc%20ge%20datetime%272010-03-08T00%3A28%3A44.183Z%27%20and%20LastModifiedDateUtc%20le%20datetime%272019-03-08T00%3A28%3A44.183Z%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
@@ -6991,69 +6993,21 @@
             },
             {
               "baseUri": "https://availabilitydemo.iqmetrix.net",
-              "uri": "/v1/Suppliers(13939)/Companies(23813)/SupplierSkus",
+              "uri":
+                "/v1/Suppliers(13939)/Companies(23813)/SupplierSkus?%24filter=LastModifiedDateUtc%20ge%20datetime%272019-03-08T00%3A28%3A44.183Z%27%20and%20LastModifiedDateUtc%20le%20datetime%272019-03-08T00%3A28%3A44.183Z%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
-              "responsePayload": [
-                {
-                  "Id": "bc255090-aa3b-49e1-9396-03a173cd6a08",
-                  "SupplierSku": "NCDM-0002",
-                  "SupplierEntityId": 13939,
-                  "IsAvailable": true,
-                  "Quantity": 500,
-                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
-                },
-                {
-                  "Id": "5c55b733-a397-40b9-a2d7-fda07b23cb9b",
-                  "SupplierSku": "NCDM-0009",
-                  "SupplierEntityId": 13939,
-                  "IsAvailable": true,
-                  "Quantity": 500,
-                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
-                },
-                {
-                  "Id": "80cdafdf-ecad-42ee-8baf-18b07555b590",
-                  "SupplierSku": "NCDM-0010",
-                  "SupplierEntityId": 13939,
-                  "IsAvailable": true,
-                  "Quantity": 500,
-                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
-                }
-              ]
+              "responsePayload": []
             },
             {
               "baseUri": "https://availabilitydemo.iqmetrix.net",
-              "uri": "/v1/Suppliers(7190)/Companies(23813)/SupplierSkus",
+              "uri":
+                "/v1/Suppliers(7190)/Companies(23813)/SupplierSkus?%24filter=LastModifiedDateUtc%20ge%20datetime%272019-03-08T00%3A28%3A44.183Z%27%20and%20LastModifiedDateUtc%20le%20datetime%272019-03-08T00%3A28%3A44.183Z%27",
               "method": "GET",
               "replyHeaders": {},
               "statusCode": 200,
-              "responsePayload": [
-                {
-                  "Id": "96b54933-9437-4121-9e3f-c6309d78ae30",
-                  "SupplierSku": "NCKH-0004",
-                  "SupplierEntityId": 7190,
-                  "IsAvailable": true,
-                  "Quantity": 500,
-                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
-                },
-                {
-                  "Id": "9de13662-9733-4409-8c45-c1d8fd27666a",
-                  "SupplierSku": "NCKH-0007",
-                  "SupplierEntityId": 7190,
-                  "IsAvailable": true,
-                  "Quantity": 500,
-                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
-                },
-                {
-                  "Id": "d0074d45-838c-43a5-bb47-1172f8579e2a",
-                  "SupplierSku": "NCKH-0008",
-                  "SupplierEntityId": 7190,
-                  "IsAvailable": true,
-                  "Quantity": 500,
-                  "LastModifiedDateUtc": "2018-03-07T21:36:44.897"
-                }
-              ]
+              "responsePayload": []
             }
           ],
           "channelProfile": {

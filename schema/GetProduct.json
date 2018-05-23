@@ -75,22 +75,22 @@
             "type": "string",
             "title": "DateUpdatedUtc (DateTime)",
             "description": "Date this Product was last updated, in UTC"
-		  },
-		  "subscriptionList": {
-			"type": "object",
-			"title": "Subscription List (Object)",
-			"description": "The subscription list id and supplier id for this item as specified in channel settings",
-			"properties": {
-				"listId": {
-					"type": "string",
-					"title": "Subscription List Id (GUID)"
-				},
-				"entityId": {
-					"type": "integer",
-					"title": "Entity Id (Integer)"
-				}
-			}
-		  },
+          },
+          "subscriptionList": {
+            "type": "object",
+            "title": "Subscription List (Object)",
+            "description": "The subscription list id and supplier id for this item as specified in channel settings",
+            "properties": {
+              "listId": {
+                "type": "string",
+                "title": "Subscription List Id (GUID)"
+              },
+              "entityId": {
+                "type": "integer",
+                "title": "Entity Id (Integer)"
+              }
+            }
+          },
           "ProductDetails": {
             "$ref": "#/definitions/ProductDetails"
           },
@@ -830,6 +830,10 @@
             "type": "integer",
             "title": "Quantity (Integer)",
             "description": "Quantity"
+          },
+          "LastModifiedDateUtc": {
+            "type": "string",
+            "title": "LastModifiedDateUtc (DateTime)"
           }
         }
       }
