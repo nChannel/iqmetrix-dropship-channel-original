@@ -3,7 +3,7 @@
   "author": "",
   "description": "",
   "dependencies": {
-    "lodash.get": "^4.4.2",
+    "jsonata": "1.5.3",
     "request": "2.83.0",
     "request-promise": "4.2.2"
   },

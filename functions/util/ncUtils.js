@@ -168,7 +168,7 @@ function isInteger(int) {
 }
 
 function extractBusinessReferences(businessReferences, doc, sep = ".") {
-    const _get = require("lodash.get");
+    const jsonata = require("jsonata");
 
     if (!isArray(businessReferences)) {
         throw new TypeError("Error: businessReferences must be an Array.");
@@ -180,8 +180,8 @@ function extractBusinessReferences(businessReferences, doc, sep = ".") {
 
     let values = [];
 
-    businessReferences.forEach(function(businessReference) {
-        values.push(_get(doc, businessReference));
+    businessReferences.forEach((businessReference) => {
+        values.push(jsonata(businessReference).evaluate(doc));
     });
 
     if (sep === null) {
