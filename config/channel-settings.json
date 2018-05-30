@@ -22,46 +22,22 @@
           "type": "object",
           "required": [
             "doGetMatrixProducts",
-            "doGetVirtualMatrixProducts",
-            "doGetSimpleProducts",
-            "canGetMatrixProducts",
-            "canGetVirtualMatrixProducts",
-            "canGetSimpleProducts"
+            "doGetSimpleProducts"
           ],
           "properties": {
             "doGetMatrixProducts": {
               "type": "boolean",
               "title": "GET Product, doGetMatrixProducts"
             },
-            "doGetVirtualMatrixProducts": {
-              "type": "boolean",
-              "title": "GET Product, doGetVirtualMatrixProducts"
-            },
             "doGetSimpleProducts": {
               "type": "boolean",
               "title": "GET Product, doGetSimpleProducts"
-            },
-            "canGetMatrixProducts": {
-              "type": "boolean",
-              "title": "GET Product, canGetMatrixProducts"
-            },
-            "canGetVirtualMatrixProducts": {
-              "type": "boolean",
-              "title": "GET Product, canGetVirtualMatrixProducts"
-            },
-            "canGetSimpleProducts": {
-              "type": "boolean",
-              "title": "GET Product, canGetSimpleProducts"
             }
           }
         },
         "configView": [
           "doGetMatrixProducts",
-          "doGetVirtualMatrixProducts",
-          "doGetSimpleProducts",
-          "canGetMatrixProducts",
-          "canGetVirtualMatrixProducts",
-          "canGetSimpleProducts"
+          "doGetSimpleProducts"
         ],
         "configValues": {
           "doGetMatrixProducts": true,
@@ -133,10 +109,6 @@
           "doPutCustomerContactsFlag": true
         },
         "configView": [
-          "canUpdateOrderFlag",
-          "canUpdateCustomerFlag",
-          "canUpdateCustomerAddressFlag",
-          "canUpdateCustomerContactFlag",
           "doPutCustomerFlag",
           "doExtractShippingAddressFromSalesOrderFlag",
           "doExtractBillingAddressFromSalesOrderFlag",
@@ -145,10 +117,6 @@
         ],
         "configModel": {
           "required": [
-            "canUpdateOrderFlag",
-            "canUpdateCustomerFlag",
-            "canUpdateCustomerAddressFlag",
-            "canUpdateCustomerContactFlag",
             "doPutCustomerFlag",
             "doExtractShippingAddressFromSalesOrderFlag",
             "doExtractBillingAddressFromSalesOrderFlag",
@@ -156,22 +124,6 @@
             "doPutCustomerContactsFlag"
           ],
           "properties": {
-            "canUpdateOrderFlag": {
-              "type": "boolean",
-              "title": "PUT Order, canUpdateOrderFlag"
-            },
-            "canUpdateCustomerFlag": {
-              "type": "boolean",
-              "title": "PUT Order, canUpdateCustomerFlag"
-            },
-            "canUpdateCustomerAddressFlag": {
-              "type": "boolean",
-              "title": "PUT Order, canUpdateCustomerAddressFlag"
-            },
-            "canUpdateCustomerContactFlag": {
-              "type": "boolean",
-              "title": "PUT Order, canUpdateCustomerContactFlag"
-            },
             "doPutCustomerFlag": {
               "type": "boolean",
               "title": "PUT Order, doPutCustomerFlag"
@@ -240,18 +192,6 @@
         "configModel": {
           "type": "object",
           "properties": {
-            "canUpdateCustomerFlag": {
-              "title": "PUT Customer, canUpdateCustomerFlag",
-              "type": "boolean"
-            },
-            "canUpdateCustomerAddressFlag": {
-              "title": "PUT Customer, canUpdateCustomerAddressFlag",
-              "type": "boolean"
-            },
-            "canUpdateCustomerContactFlag": {
-              "title": "PUT Customer, canUpdateCustomerContactFlag",
-              "type": "boolean"
-            },
             "doPutCustomerAddressesFlag": {
               "title": "PUT Customer, doPutCustomerAddressesFlag",
               "type": "boolean"
@@ -262,17 +202,11 @@
             }
           },
           "required": [
-            "canUpdateCustomerFlag",
-            "canUpdateCustomerAddressFlag",
-            "canUpdateCustomerContactFlag",
             "doPutCustomerAddressesFlag",
             "doPutCustomerContactsFlag"
           ]
         },
         "configView": [
-          "canUpdateCustomerFlag",
-          "canUpdateCustomerAddressFlag",
-          "canUpdateCustomerContactFlag",
           "doPutCustomerAddressesFlag",
           "doPutCustomerContactsFlag"
         ],
@@ -305,15 +239,11 @@
             "doPutCustomerAddressesFlag": {
               "title": "PUT Customer Address, doPutCustomerAddressesFlag",
               "type": "boolean"
-            },
-            "canUpdateCustomerAddressFlag": {
-              "title": "Update Customer Address, canUpdateCustomerAddressFlag",
-              "type": "boolean"
             }
           },
-          "required": ["doPutCustomerAddressesFlag", "canUpdateCustomerAddressFlag"]
+          "required": ["doPutCustomerAddressesFlag"]
         },
-        "configView": ["doPutCustomerAddressesFlag", "canUpdateCustomerAddressFlag"],
+        "configView": ["doPutCustomerAddressesFlag"],
         "configValues": {
           "doPutCustomerAddressesFlag": true,
           "canUpdateCustomerAddressFlag": true
@@ -349,15 +279,11 @@
             "doPutCustomerContactsFlag": {
               "title": "PUT Customer Contacts, doPutCustomerContactsFlag",
               "type": "boolean"
-            },
-            "canUpdateCustomerContactFlag": {
-              "title": "Update Customer Contacts, canUpdateCustomerContactFlag",
-              "type": "boolean"
             }
           },
-          "required": ["doPutCustomerContactsFlag", "canUpdateCustomerContactFlag"]
+          "required": ["doPutCustomerContactsFlag"]
         },
-        "configView": ["doPutCustomerContactsFlag", "canUpdateCustomerContactFlag"],
+        "configView": ["doPutCustomerContactsFlag"],
         "configValues": {
           "doPutCustomerContactsFlag": true,
           "canUpdateCustomerContactFlag": true
