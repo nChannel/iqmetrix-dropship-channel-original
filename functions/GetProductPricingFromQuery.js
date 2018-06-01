@@ -1,15 +1,15 @@
-function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload, callback) {
+function GetProductPricingFromQuery(ncUtil, channelProfile, flowContext, payload, callback) {
     const nc = require("./util/ncUtils");
-    const referenceLocations = ["productSimpleBusinessReferences"];
-    const stub = new nc.Stub("GetProductSimpleFromQuery", referenceLocations, ...arguments);
+    const referenceLocations = ["productPricingBusinessReferences"];
+    const stub = new nc.Stub("GetProductPricingFromQuery", referenceLocations, ...arguments);
 
     validateFunction()
         .then(getProductLists)
-        .then(keepSimpleItems)
         .then(flattenProductLists)
         .then(getProductDetails)
-        .then(keepModifiedItems)
         .then(filterVendors)
+        .then(getPrices)
+        .then(keepModifiedItems)
         .then(buildResponseObject)
         .catch(handleError)
         .then(() => callback(stub.out))
@@ -38,6 +38,22 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
                 stub.messages.push(
                     `The channelProfile.channelSettingsValues.subscriptionLists array is ${
                         stub.channelProfile.channelSettingsValues.subscriptionLists == null ? "missing" : "invalid"
+                    }.`
+                );
+            }
+
+            if (!nc.isInteger(stub.channelProfile.channelSettingsValues.maxParallelRequests)) {
+                stub.messages.push(
+                    `The channelProfile.channelSettingsValues.maxParallelRequests integer is ${
+                        stub.channelProfile.channelSettingsValues.maxParallelRequests == null ? "missing" : "invalid"
+                    }.`
+                );
+            }
+
+            if (!nc.isNonEmptyString(stub.channelProfile.channelAuthValues.location_id)) {
+                stub.messages.push(
+                    `The channelProfile.channelAuthValues.location_id string is ${
+                        stub.channelProfile.channelAuthValues.location_id == null ? "missing" : "invalid"
                     }.`
                 );
             }
@@ -94,26 +110,6 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
         return response.body.Items;
     }
 
-    async function keepSimpleItems(productLists) {
-        logInfo("Keep simple items...");
-        let totalCount = 0;
-        let simpleCount = 0;
-        const filteredProductLists = productLists.map(productList => {
-            totalCount = totalCount + productList.length;
-            const filtered = [];
-            for (let i = 0; i < productList.length; i++) {
-                const product = productList[i];
-                if (productList.filter(p => p.Slug.split("-")[0] === product.Slug.split("-")[0]).length === 1) {
-                    filtered.push(product);
-                }
-            }
-            simpleCount = simpleCount + filtered.length;
-            return filtered;
-        });
-        logInfo(`${simpleCount} of ${totalCount} products are simple products.`);
-        return filteredProductLists;
-    }
-
     async function flattenProductLists(productLists) {
         logInfo("Flatten product lists...");
         return [].concat(...productLists);
@@ -153,21 +149,6 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
         return response.body.CatalogItems;
     }
 
-    async function keepModifiedItems(productList) {
-        logInfo("Keep modified items...");
-        const start = Date.parse(stub.payload.doc.modifiedDateRange.startDateGMT);
-        const end = Date.parse(stub.payload.doc.modifiedDateRange.endDateGMT);
-        const products = productList.filter(product => {
-            const headerMod = Date.parse(product.DateUpdatedUtc);
-            const detailMod = Date.parse(product.ProductDetails.DateUpdatedUtc);
-            return (headerMod >= start && headerMod <= end) || (detailMod >= start && detailMod <= end);
-        });
-        logInfo(
-            `${products.length} of ${productList.length} products have been modified withing the given date range.`
-        );
-        return products;
-    }
-
     async function filterVendors(productList) {
         logInfo("Filter vendors...");
         productList.forEach(product => {
@@ -180,23 +161,74 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
         return productList;
     }
 
+    async function getPrices(productList) {
+        logInfo("Get prices...");
+        const numProducts = productList.length;
+        if (stub.channelProfile.channelSettingsValues.maxParallelRequests === 0) {
+            stub.channelProfile.channelSettingsValues.maxParallelRequests = numProducts;
+        }
+        let products = [];
+        let current = 0;
+        do {
+            const batch = productList.slice(
+                current,
+                current + stub.channelProfile.channelSettingsValues.maxParallelRequests
+            );
+            logInfo(
+                `Get products ${current} - ${current +
+                    stub.channelProfile.channelSettingsValues.maxParallelRequests}...`
+            );
+            current = current + stub.channelProfile.channelSettingsValues.maxParallelRequests;
+            const productBatch = await Promise.all(batch.map(getPricing));
+            products.push(...productBatch);
+        } while (current < numProducts);
+        return products;
+    }
+
+    async function getPricing(product) {
+        logInfo(`Get pricing for product ${product.CatalogItemId}...`);
+        const response = await stub.request.get({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://pricing${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Entities(${
+                stub.channelProfile.channelAuthValues.location_id
+            })/CatalogItems(${product.CatalogItemId})/Pricing`
+        });
+        product.Pricing = response.body[0];
+        return product;
+    }
+
+     // The necessary timestamp is not yet being returned by the iQmetrix API,
+     // so it will never find any modified prices currently.
+    async function keepModifiedItems(productList) {
+        logInfo("Keep items whose quantity has been modified...");
+        const start = Date.parse(stub.payload.doc.modifiedDateRange.startDateGMT);
+        const end = Date.parse(stub.payload.doc.modifiedDateRange.endDateGMT);
+        const products = productList.filter(product => {
+            const priceMod = Date.parse(product.Pricing.DateUpdatedUtc);
+            return priceMod >= start && priceMod <= end;
+        });
+        logInfo(`${products.length} of ${productList.length} prices have been modified within the given date range.`);
+        return products;
+    }
+
     async function buildResponseObject(products) {
         if (products.length > 0) {
-            logInfo(`Submitting ${products.length} modified products...`);
+            logInfo(`Submitting ${products.length} modified product prices...`);
             stub.out.ncStatusCode = 200;
             stub.out.payload = [];
             products.forEach(product => {
                 stub.out.payload.push({
                     doc: product,
-                    productSimpleRemoteID: product.CatalogItemId,
-                    productSimpleBusinessReference: nc.extractBusinessReferences(
-                        stub.channelProfile.productSimpleBusinessReferences,
+                    productPricingRemoteID: product.CatalogItemId,
+                    productPricingBusinessReference: nc.extractBusinessReferences(
+                        stub.channelProfileproductPricingBusinessReferences,
                         product
                     )
                 });
             });
         } else {
-            logInfo("No modified products found.");
+            logInfo("No product prices have been modified.");
             stub.out.ncStatusCode = 204;
         }
     }
@@ -220,4 +252,4 @@ function GetProductSimpleFromQuery(ncUtil, channelProfile, flowContext, payload,
     }
 }
 
-module.exports.GetProductSimpleFromQuery = GetProductSimpleFromQuery;
+module.exports.GetProductPricingFromQuery = GetProductPricingFromQuery;

@@ -2,6 +2,12 @@
   "CheckForCustomer": {
     "statusCodes": [200, 204, 409, 400, 429, 500]
   },
+  "CheckForCustomerAddress": {
+    "statusCodes": [200, 204, 409, 400, 429, 500]
+  },
+  "CheckForCustomerContact": {
+    "statusCodes": [200, 204, 409, 400, 429, 500]
+  },
   "CheckForProduct": {
     "statusCodes": [200, 204, 409, 400, 429, 500]
   },
@@ -59,6 +65,12 @@
   "InsertCustomer": {
     "statusCodes": [201, 400, 429, 500]
   },
+  "InsertCustomerAddress": {
+    "statusCodes": [201, 400, 429, 500]
+  },
+  "InsertCustomerContact": {
+    "statusCodes": [201, 400, 429, 500]
+  },
   "InsertFulfillment": {
     "statusCodes": [201, 400, 429, 500]
   },
@@ -80,10 +92,28 @@
   "UpdateCustomer": {
     "statusCodes": [200, 400, 429, 500]
   },
+  "UpdateCustomerAddress": {
+    "statusCodes": [200, 400, 429, 500]
+  },
+  "UpdateCustomerContact": {
+    "statusCodes": [200, 400, 429, 500]
+  },
   "UpdateFulfillment": {
     "statusCodes": [200, 400, 429, 500]
   },
   "UpdateSalesOrder": {
     "statusCodes": [200, 400, 429, 500]
+  },
+  "GetProductSimpleFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
+  },
+  "GetProductMatrixFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
+  },
+  "GetProductPricingFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
+  },
+  "GetProductQuantityFromQuery": {
+    "statusCodes": [200, 204, 400, 429, 500]
   }
 }

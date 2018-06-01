@@ -1,122 +1,63 @@
-let ExtractCustomerContactsFromCustomer = function(
-    ncUtil,
-    channelProfile,
-    flowContext,
-    payload,
-    callback)
-{
+function ExtractCustomerContactsFromCustomer(ncUtil, channelProfile, flowContext, payload, callback) {
+    const nc = require("./util/ncUtils");
+    const referenceLocations = ["customerBusinessReferences"];
+    const stub = new nc.Stub("ExtractCustomerContactsFromCustomer", referenceLocations, ...arguments);
 
-    log("Building callback object...", ncUtil);
-    let out = {
-        ncStatusCode: null,
-        payload: {}
-    };
+    validateFunction()
+        .then(extractCustomerContacts)
+        .catch(handleError)
+        .then(() => callback(stub.out))
+        .catch(error => {
+            logError(`The callback function threw an exception: ${error}`);
+            setTimeout(() => {
+                throw error;
+            });
+        });
 
-    // Check callback
-    if (!callback) {
-        throw new Error("A callback function was not provided");
-    } else if (typeof callback !== 'function') {
-        throw new TypeError("callback is not a function")
+    function logInfo(msg) {
+        stub.log(msg, "info");
     }
 
-    try {
-        let notFound = false;
-        let invalid = false;
-        let invalidMsg = "";
-        let data = {};
+    function logWarn(msg) {
+        stub.log(msg, "warn");
+    }
 
-        // Check ncUtil
-        if (!ncUtil) {
-            invalid = true;
-            invalidMsg = "ExtractCustomerContactsFromCustomer - Invalid Request: ncUtil was not passed into the function";
+    function logError(msg) {
+        stub.log(msg, "error");
+    }
+
+    async function validateFunction() {
+        if (stub.messages.length > 0) {
+            stub.messages.forEach(msg => logError(msg));
+            stub.out.ncStatusCode = 400;
+            throw new Error(`Invalid request [${stub.messages.join(" ")}]`);
         }
+        logInfo("Function is valid.");
+    }
 
-        if (!channelProfile) {
-          invalid = true;
-          invalidMsg = "channelProfile was not provided"
-        } else if (!channelProfile.channelSettingsValues) {
-          invalid = true;
-          invalidMsg = "channelProfile.channelSettingsValues was not provided"
-        } else if (!channelProfile.channelSettingsValues.protocol) {
-          invalid = true;
-          invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided"
-        } else if (!channelProfile.channelAuthValues) {
-          invalid = true;
-          invalidMsg = "channelProfile.channelAuthValues was not provided"
-        } else if (!channelProfile.customerBusinessReferences) {
-          invalid = true;
-          invalidMsg = "channelProfile.customerBusinessReferences was not provided"
-        } else if (!Array.isArray(channelProfile.customerBusinessReferences)) {
-          invalid = true;
-          invalidMsg = "channelProfile.customerBusinessReferences is not an array"
-        } else if (channelProfile.customerBusinessReferences.length === 0) {
-          invalid = true;
-          invalidMsg = "channelProfile.customerBusinessReferences is empty"
-        }
+    async function extractCustomerContacts() {
+        logInfo("Extracting customer contact methods...");
 
-        // Check Payload
-        if (!invalid) {
-          if (payload) {
-              if (!payload.doc) {
-                  invalidMsg = "Extract Customer Contacts From Customer - Invalid Request: payload.doc was not provided";
-                  invalid = true;
-              } else if (!payload.doc.ContactMethods) {
-                  notFound = true;
-                  invalidMsg = "Extract Customer Contacts From Customer - Contacts Not Found: The customer has no contacts (payload.doc.ContactMethods)";
-              } else {
-                  data = payload.doc.ContactMethods;
-              }
-          } else {
-              invalidMsg = "Extract Customer Contacts From Customer - Invalid Request: payload was not provided";
-              invalid = true;
-          }
-        }
-
-        if (!invalid && !notFound) {
-          // Customer Contacts Found
-          out.payload = [];
-
-          data.forEach((contactMethod) => {
-            let payloadElement = {
-              doc: contactMethod,
-              customerRemoteID: payload.customerRemoteID,
-              customerBusinessReference: payload.customerBusinessReference
-            };
-            out.payload.push(payloadElement);
-          });
-
-          out.ncStatusCode = 200;
-
-          callback(out);
-        } else if (!invalid && notFound){
-          // Customer Contacts Not Found
-          log(invalidMsg, ncUtil);
-          out.ncStatusCode = 204;
-
-          callback(out);
+        if (nc.isNonEmptyArray(stub.payload.doc.ContactMethods)) {
+            stub.out.payload = stub.payload.doc.ContactMethods.map(contactMethod => {
+                return {
+                    doc: contactMethod,
+                    customerRemoteID: stub.payload.customerRemoteID,
+                    customerBusinessReference: stub.payload.customerBusinessReference
+                };
+            });
+            stub.out.ncStatusCode = 200;
         } else {
-          // Invalid Request (payload or payload.doc was not passed in)
-          log(invalidMsg, ncUtil);
-          out.ncStatusCode = 400;
-          out.payload.error = { err: invalidMsg };
-
-          callback(out);
+            logWarn("No customer contact methods found.");
+            stub.out.ncStatusCode = 204;
         }
     }
-    catch (err){
-        logError("Exception occurred in ExtractCustomerContactsFromCustomer - " + err, ncUtil);
-        out.ncStatusCode = 500;
-        out.payload.error = { err: err.message, stackTrace: err.stackTrace };
-        callback(out);
+
+    async function handleError(error) {
+        logError(error);
+        stub.out.payload.error = error;
+        stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
     }
-
 }
 
-function logError(msg, ncUtil) {
-    console.log("[error] " + msg);
-}
-
-function log(msg, ncUtil) {
-    console.log("[info] " + msg);
-}
 module.exports.ExtractCustomerContactsFromCustomer = ExtractCustomerContactsFromCustomer;

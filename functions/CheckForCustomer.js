@@ -1,148 +1,108 @@
-let CheckForCustomer = function (ncUtil,
-                                 channelProfile,
-                                 flowContext,
-                                 payload,
-                                 callback) {
+function CheckForCustomer(ncUtil, channelProfile, flowContext, payload, callback) {
+    const nc = require("./util/ncUtils");
+    const referenceLocations = ["customerBusinessReferences"];
+    const stub = new nc.Stub("CheckForCustomer", referenceLocations, ...arguments);
 
-  log("Building response object...", ncUtil);
-  let out = {
-    ncStatusCode: null,
-    response: {},
-    payload: {}
-  };
+    validateFunction()
+        .then(searchForCustomer)
+        .then(buildResponse)
+        .catch(handleError)
+        .then(() => callback(stub.out))
+        .catch(error => {
+            logError(`The callback function threw an exception: ${error}`);
+            setTimeout(() => {
+                throw error;
+            });
+        });
 
-  let invalid = false;
-  let invalidMsg = "";
-
-  //If ncUtil does not contain a request object, the request can't be sent
-  if (!ncUtil) {
-    invalid = true;
-    invalidMsg = "ncUtil was not provided"
-  }
-
-  //If channelProfile does not contain channelSettingsValues, channelAuthValues or customerBusinessReferences, the request can't be sent
-  if (!channelProfile) {
-    invalid = true;
-    invalidMsg = "channelProfile was not provided"
-  } else if (!channelProfile.channelSettingsValues) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues was not provided"
-  } else if (!channelProfile.channelSettingsValues.protocol) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided"
-  } else if (!channelProfile.channelAuthValues) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelAuthValues was not provided"
-  } else if (!channelProfile.customerBusinessReferences) {
-    invalid = true;
-    invalidMsg = "channelProfile.customerBusinessReferences was not provided"
-  } else if (!Array.isArray(channelProfile.customerBusinessReferences)) {
-    invalid = true;
-    invalidMsg = "channelProfile.customerBusinessReferences is not an array"
-  } else if (channelProfile.customerBusinessReferences.length === 0) {
-    invalid = true;
-    invalidMsg = "channelProfile.customerBusinessReferences is empty"
-  }
-
-  //If a sales order document was not passed in, the request is invalid
-  if (!payload) {
-    invalid = true;
-    invalidMsg = "payload was not provided"
-  } else if (!payload.doc) {
-    invalid = true;
-    invalidMsg = "payload.doc was not provided";
-  }
-
-  //If callback is not a function
-  if (!callback) {
-    throw new Error("A callback function was not provided");
-  } else if (typeof callback !== 'function') {
-    throw new TypeError("callback is not a function")
-  }
-
-  if (!invalid) {
-    // Using request for example - A different npm module may be needed depending on the API communication is being made to
-    // The `soap` module can be used in place of `request` but the logic and data being sent will be different
-    let request = require('request');
-
-    let url = "https://localhost/";
-
-    // Add any headers for the request
-    let headers = {
-
-    };
-
-    // Log URL
-    log("Using URL [" + url + "]", ncUtil);
-
-    // Set options
-    let options = {
-      url: url,
-      method: "GET",
-      headers: headers,
-      body: payload.doc,
-      json: true
-    };
-
-    try {
-      // Pass in our URL and headers
-      request(options, function (error, response, body) {
-        if (!error) {
-          // If no errors, process results here
-          if (response.statusCode == 200) {
-            if (body.customers && body.customers.length == 1) {
-              out.ncStatusCode = 200;
-              out.payload = {
-                customerRemoteID: "1",
-                customerBusinessReference: "email"
-              };
-            } else if (body.customers.length > 1) {
-              out.ncStatusCode = 409;
-              out.payload.error = body;
-            } else {
-              out.ncStatusCode = 204;
-            }
-          } else if (response.statusCode == 429) {
-            out.ncStatusCode = 429;
-            out.payload.error = body;
-          } else if (response.statusCode == 500) {
-            out.ncStatusCode = 500;
-            out.payload.error = body;
-          } else {
-            out.ncStatusCode = 400;
-            out.payload.error = body;
-          }
-          callback(out);
-        } else {
-          // If an error occurs, log the error here
-          logError("Do CheckForCustomer Callback error - " + error, ncUtil);
-          out.ncStatusCode = 500;
-          out.payload.error = error;
-          callback(out);
-        }
-      });
-    } catch (err) {
-      // Exception Handling
-      logError("Exception occurred in CheckForCustomer - " + err, ncUtil);
-      out.ncStatusCode = 500;
-      out.payload.error = {err: err, stack: err.stackTrace};
-      callback(out);
+    function logInfo(msg) {
+        stub.log(msg, "info");
     }
-  } else {
-    // Invalid Request
-    log("Callback with an invalid request - " + invalidMsg, ncUtil);
-    out.ncStatusCode = 400;
-    out.payload.error = invalidMsg;
-    callback(out);
-  }
-};
 
-function logError(msg, ncUtil) {
-  console.log("[error] " + msg);
-}
+    function logWarn(msg) {
+        stub.log(msg, "warn");
+    }
 
-function log(msg, ncUtil) {
-  console.log("[info] " + msg);
+    function logError(msg) {
+        stub.log(msg, "error");
+    }
+
+    async function validateFunction() {
+        if (stub.messages.length > 0) {
+            stub.messages.forEach(msg => logError(msg));
+            stub.out.ncStatusCode = 400;
+            throw new Error(`Invalid request [${stub.messages.join(" ")}]`);
+        }
+        logInfo("Function is valid.");
+    }
+
+    async function searchForCustomer() {
+        logInfo("Searching for existing customer...");
+
+        const filters = [];
+        stub.channelProfile.customerBusinessReferences.forEach(refName => {
+            const refValue = nc.extractBusinessReferences([refName], stub.payload.doc);
+            filters.push(`${refName} eq '${refValue}'`);
+        });
+
+        return await stub.request.get({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://crm${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Customers`,
+            qs: { $filter: filters.join(" and ") }
+        });
+    }
+
+    async function buildResponse(response) {
+        const customers = response.body;
+        stub.out.response.endpointStatusCode = response.statusCode;
+
+        if (!nc.isArray(customers)) {
+            throw new TypeError(`Search response is not an array. Response: ${JSON.stringify(customers, null, 2)}`);
+        }
+
+        if (customers.length === 1) {
+            if (!nc.isObject(customers[0]) || !nc.isNonEmptyString(customers[0].Id)) {
+                throw new TypeError(
+                    `Search response is not in expected format. Response: ${JSON.stringify(customers[0], null, 2)}`
+                );
+            }
+            logInfo("Found a matching customer.");
+            stub.out.ncStatusCode = 200;
+            stub.out.payload.customerRemoteID = customers[0].Id;
+            stub.out.payload.customerBusinessReference = nc.extractBusinessReferences(
+                stub.channelProfile.customerBusinessReferences,
+                customers[0]
+            );
+        } else if (customers.length === 0) {
+            logInfo("Customer does not exist.");
+            stub.out.ncStatusCode = 204;
+        } else {
+            logWarn("Multiple customers matched query.");
+            stub.out.payload.error = new Error(
+                `Search returned multiple customers. Response: ${JSON.stringify(customers, null, 2)}`
+            );
+            stub.out.ncStatusCode = 409;
+        }
+    }
+
+    async function handleError(error) {
+        logError(error);
+        if (error.name === "StatusCodeError") {
+            stub.out.response.endpointStatusCode = error.statusCode;
+            stub.out.response.endpointStatusMessage = error.message;
+            if (error.statusCode >= 500) {
+                stub.out.ncStatusCode = 500;
+            } else if (error.statusCode === 429) {
+                logWarn("Request was throttled.");
+                stub.out.ncStatusCode = 429;
+            } else {
+                stub.out.ncStatusCode = 400;
+            }
+        }
+        stub.out.payload.error = error;
+        stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
+    }
 }
 
 module.exports.CheckForCustomer = CheckForCustomer;

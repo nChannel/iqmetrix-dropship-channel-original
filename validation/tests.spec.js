@@ -367,28 +367,30 @@ if (fs.existsSync('config/channel-settings.json')) {
           function executeTest (unitTest, test, statusCode, errorTest = false) {
             errorTest = (typeof errorTest === 'boolean') ? errorTest : false;
             if (unitTest === 'nock') {
-              let fake = nock(test.baseUri);
+              let base = test.baseUri;
+              let fake = nock(base);
               for (let i = 0; i < test.links.length; i++) {
+                base = test.links[i].baseUri ? test.links[i].baseUri : test.baseUri;
                 switch (test.links[i].method.toUpperCase()) {
                   case 'GET':
                     errorTest === false ?
-                    fake.get(test.links[i].uri).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
-                    fake.get(test.links[i].uri).replyWithError({ message: "Internal Error" });
+                    nock(base).get(test.links[i].uri).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
+                    nock(base).get(test.links[i].uri).replyWithError({ message: "Internal Error" });
                     break;
                   case 'POST':
                     errorTest === false ?
-                    fake.post(test.links[i].uri, test.payload.doc).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
-                    fake.post(test.links[i].uri, test.payload.doc).replyWithError({ message: "Internal Error" });
+                    nock(base).post(test.links[i].uri).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
+                    nock(base).post(test.links[i].uri).replyWithError({ message: "Internal Error" });
                     break;
                   case 'PUT':
                     errorTest === false ?
-                    fake.put(test.links[i].uri, test.payload.doc).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
-                    fake.put(test.links[i].uri, test.payload.doc).replyWithError({ message: "Internal Error" });
+                    nock(base).put(test.links[i].uri, test.payload.doc).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
+                    nock(base).put(test.links[i].uri, test.payload.doc).replyWithError({ message: "Internal Error" });
                     break;
                   case 'DELETE':
                     errorTest === false ?
-                    fake.delete(test.links[i].uri).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
-                    fake.delete(test.links[i].uri).replyWithError({ message: "Internal Error" });
+                    nock(base).delete(test.links[i].uri).reply(statusCode != null ? statusCode : test.links[i].statusCode, test.links[i].responsePayload) :
+                    nock(base).delete(test.links[i].uri).replyWithError({ message: "Internal Error" });
                     break;
                 }
               }
