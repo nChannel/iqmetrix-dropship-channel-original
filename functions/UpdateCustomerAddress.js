@@ -1,10 +1,10 @@
-function InsertCustomer(ncUtil, channelProfile, flowContext, payload, callback) {
+function UpdateCustomerAddress(ncUtil, channelProfile, flowContext, payload, callback) {
     const nc = require("./util/ncUtils");
-    const referenceLocations = ["customerBusinessReferences"];
-    const stub = new nc.Stub("InsertCustomer", referenceLocations, ...arguments);
+    const referenceLocations = ["customerAddressBusinessReferences"];
+    const stub = new nc.Stub("UpdateCustomerAddress", referenceLocations, ...arguments);
 
     validateFunction()
-        .then(insertCustomer)
+        .then(updateCustomerAddress)
         .then(buildResponse)
         .catch(handleError)
         .then(() => callback(stub.out))
@@ -36,25 +36,27 @@ function InsertCustomer(ncUtil, channelProfile, flowContext, payload, callback) 
         logInfo("Function is valid.");
     }
 
-    async function insertCustomer() {
-        logInfo("Inserting new customer record...");
+    async function updateCustomerAddress() {
+        logInfo("Updating existing customer address record...");
 
-        return await stub.request.post({
+        return await stub.request.put({
             url: `${stub.channelProfile.channelSettingsValues.protocol}://crm${
                 stub.channelProfile.channelSettingsValues.environment
-            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Customers`,
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Customers(${
+                stub.payload.customerRemoteID
+            })/Addresses(${stub.payload.customerAddressRemoteID})`,
             body: stub.payload.doc
         });
     }
 
     async function buildResponse(response) {
-        const customer = response.body;
+        const customerAddress = response.body;
         stub.out.response.endpointStatusCode = response.statusCode;
         stub.out.ncStatusCode = response.statusCode;
-        stub.out.payload.customerRemoteID = customer.Id;
-        stub.out.payload.customerBusinessReference = nc.extractBusinessReferences(
-            stub.channelProfile.customerBusinessReferences,
-            customer
+        stub.out.payload.customerAddressRemoteID = customerAddress.Id;
+        stub.out.payload.customerAddressBusinessReference = nc.extractBusinessReferences(
+            stub.channelProfile.customerAddressBusinessReferences,
+            customerAddress
         );
     }
 
@@ -77,4 +79,4 @@ function InsertCustomer(ncUtil, channelProfile, flowContext, payload, callback) 
     }
 }
 
-module.exports.InsertCustomer = InsertCustomer;
+module.exports.UpdateCustomerAddress = UpdateCustomerAddress;

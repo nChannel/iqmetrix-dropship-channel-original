@@ -1,142 +1,82 @@
-let UpdateCustomer = function (ncUtil,
-                                 channelProfile,
-                                 flowContext,
-                                 payload,
-                                 callback) {
+function UpdateCustomer(ncUtil, channelProfile, flowContext, payload, callback) {
+    const nc = require("./util/ncUtils");
+    const referenceLocations = ["customerBusinessReferences"];
+    const stub = new nc.Stub("UpdateCustomer", referenceLocations, ...arguments);
 
-  log("Building response object...", ncUtil);
-  let out = {
-    ncStatusCode: null,
-    response: {},
-    payload: {}
-  };
+    validateFunction()
+        .then(updateCustomer)
+        .then(buildResponse)
+        .catch(handleError)
+        .then(() => callback(stub.out))
+        .catch(error => {
+            logError(`The callback function threw an exception: ${error}`);
+            setTimeout(() => {
+                throw error;
+            });
+        });
 
-  let invalid = false;
-  let invalidMsg = "";
-
-  //If ncUtil does not contain a request object, the request can't be sent
-  if (!ncUtil) {
-    invalid = true;
-    invalidMsg = "ncUtil was not provided"
-  }
-
-  //If channelProfile does not contain channelSettingsValues, channelAuthValues or customerBusinessReferences, the request can't be sent
-  if (!channelProfile) {
-    invalid = true;
-    invalidMsg = "channelProfile was not provided"
-  } else if (!channelProfile.channelSettingsValues) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues was not provided"
-  } else if (!channelProfile.channelSettingsValues.protocol) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided"
-  } else if (!channelProfile.channelAuthValues) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelAuthValues was not provided"
-  } else if (!channelProfile.customerBusinessReferences) {
-    invalid = true;
-    invalidMsg = "channelProfile.customerBusinessReferences was not provided"
-  } else if (!Array.isArray(channelProfile.customerBusinessReferences)) {
-    invalid = true;
-    invalidMsg = "channelProfile.customerBusinessReferences is not an array"
-  } else if (channelProfile.customerBusinessReferences.length === 0) {
-    invalid = true;
-    invalidMsg = "channelProfile.customerBusinessReferences is empty"
-  }
-
-  //If a sales order document was not passed in, the request is invalid
-  if (!payload) {
-    invalid = true;
-    invalidMsg = "payload was not provided"
-  } else if (!payload.doc) {
-    invalid = true;
-    invalidMsg = "payload.doc was not provided";
-  }
-
-  //If callback is not a function
-  if (!callback) {
-    throw new Error("A callback function was not provided");
-  } else if (typeof callback !== 'function') {
-    throw new TypeError("callback is not a function")
-  }
-
-  if (!invalid) {
-    // Using request for example - A different npm module may be needed depending on the API communication is being made to
-    // The `soap` module can be used in place of `request` but the logic and data being sent will be different
-    let request = require('request');
-
-    let url = "https://localhost/";
-
-    // Add any headers for the request
-    let headers = {
-
-    };
-
-    // Log URL
-    log("Using URL [" + url + "]", ncUtil);
-
-    // Set options
-    let options = {
-      url: url,
-      method: "PUT",
-      headers: headers,
-      body: payload.doc,
-      json: true
-    };
-
-    try {
-      // Pass in our URL and headers
-      request(options, function (error, response, body) {
-        if (!error) {
-          // If no errors, process results here
-          if (response.statusCode === 200 && body.customer) {
-            out.payload = {
-              doc: body,
-              customerBusinessReference: body.customer.email
-            };
-
-            out.ncStatusCode = 200;
-          } else if (response.statusCode == 429) {
-            out.ncStatusCode = 429;
-            out.payload.error = body;
-          } else if (response.statusCode == 500) {
-            out.ncStatusCode = 500;
-            out.payload.error = body;
-          } else {
-            out.ncStatusCode = 400;
-            out.payload.error = body;
-          }
-          callback(out);
-        } else {
-          // If an error occurs, log the error here
-          logError("Do UpdateCustomer Callback error - " + error, ncUtil);
-          out.ncStatusCode = 500;
-          out.payload.error = error;
-          callback(out);
-        }
-      });
-    } catch (err) {
-      // Exception Handling
-      logError("Exception occurred in UpdateCustomer - " + err, ncUtil);
-      out.ncStatusCode = 500;
-      out.payload.error = {err: err, stack: err.stackTrace};
-      callback(out);
+    function logInfo(msg) {
+        stub.log(msg, "info");
     }
-  } else {
-    // Invalid Request
-    log("Callback with an invalid request - " + invalidMsg, ncUtil);
-    out.ncStatusCode = 400;
-    out.payload.error = invalidMsg;
-    callback(out);
-  }
-};
 
-function logError(msg, ncUtil) {
-  console.log("[error] " + msg);
-}
+    function logWarn(msg) {
+        stub.log(msg, "warn");
+    }
 
-function log(msg, ncUtil) {
-  console.log("[info] " + msg);
+    function logError(msg) {
+        stub.log(msg, "error");
+    }
+
+    async function validateFunction() {
+        if (stub.messages.length > 0) {
+            stub.messages.forEach(msg => logError(msg));
+            stub.out.ncStatusCode = 400;
+            throw new Error(`Invalid request [${stub.messages.join(" ")}]`);
+        }
+        logInfo("Function is valid.");
+    }
+
+    async function updateCustomer() {
+        logInfo("Updating existing customer record...");
+
+        return await stub.request.put({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://crm${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Customers(${
+                stub.payload.customerRemoteID
+            })`,
+            body: stub.payload.doc
+        });
+    }
+
+    async function buildResponse(response) {
+        const customer = response.body;
+        stub.out.response.endpointStatusCode = response.statusCode;
+        stub.out.ncStatusCode = response.statusCode;
+        stub.out.payload.customerRemoteID = customer.Id;
+        stub.out.payload.customerBusinessReference = nc.extractBusinessReferences(
+            stub.channelProfile.customerBusinessReferences,
+            customer
+        );
+    }
+
+    async function handleError(error) {
+        logError(error);
+        if (error.name === "StatusCodeError") {
+            stub.out.response.endpointStatusCode = error.statusCode;
+            stub.out.response.endpointStatusMessage = error.message;
+            if (error.statusCode >= 500) {
+                stub.out.ncStatusCode = 500;
+            } else if (error.statusCode === 429) {
+                logWarn("Request was throttled.");
+                stub.out.ncStatusCode = 429;
+            } else {
+                stub.out.ncStatusCode = 400;
+            }
+        }
+        stub.out.payload.error = error;
+        stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
+    }
 }
 
 module.exports.UpdateCustomer = UpdateCustomer;

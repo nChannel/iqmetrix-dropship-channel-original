@@ -1,165 +1,223 @@
-let GetProductMatrixFromQuery = function (ncUtil,
-                                 channelProfile,
-                                 flowContext,
-                                 payload,
-                                 callback) {
+function GetProductMatrixFromQuery(ncUtil, channelProfile, flowContext, payload, callback) {
+    const nc = require("./util/ncUtils");
+    const referenceLocations = ["productMatrixBusinessReferences"];
+    const stub = new nc.Stub("GetProductMatrixFromQuery", referenceLocations, ...arguments);
 
-  log("Building response object...", ncUtil);
-  let out = {
-    ncStatusCode: null,
-    response: {},
-    payload: {}
-  };
+    validateFunction()
+        .then(getProductLists)
+        .then(keepMatrixItems)
+        .then(flattenProductLists)
+        .then(getProductDetails)
+        .then(keepModifiedItems)
+        .then(filterVendors)
+        .then(buildResponseObject)
+        .catch(handleError)
+        .then(() => callback(stub.out))
+        .catch(error => {
+            logError(`The callback function threw an exception: ${error}`);
+            setTimeout(() => {
+                throw error;
+            });
+        });
 
-  let invalid = false;
-  let invalidMsg = "";
-
-  //If ncUtil does not contain a request object, the request can't be sent
-  if (!ncUtil) {
-    invalid = true;
-    invalidMsg = "ncUtil was not provided"
-  }
-
-  //If channelProfile does not contain channelSettingsValues, channelAuthValues or productBusinessReferences, the request can't be sent
-  if (!channelProfile) {
-    invalid = true;
-    invalidMsg = "channelProfile was not provided"
-  } else if (!channelProfile.channelSettingsValues) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues was not provided"
-  } else if (!channelProfile.channelSettingsValues.protocol) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelSettingsValues.protocol was not provided"
-  } else if (!channelProfile.channelAuthValues) {
-    invalid = true;
-    invalidMsg = "channelProfile.channelAuthValues was not provided"
-  } else if (!channelProfile.productBusinessReferences) {
-    invalid = true;
-    invalidMsg = "channelProfile.productBusinessReferences was not provided"
-  } else if (!Array.isArray(channelProfile.productBusinessReferences)) {
-    invalid = true;
-    invalidMsg = "channelProfile.productBusinessReferences is not an array"
-  } else if (channelProfile.productBusinessReferences.length === 0) {
-    invalid = true;
-    invalidMsg = "channelProfile.productBusinessReferences is empty"
-  }
-
-  //If a sales order document was not passed in, the request is invalid
-  if (!payload) {
-    invalid = true;
-    invalidMsg = "payload was not provided"
-  } else if (!payload.doc) {
-    invalid = true;
-    invalidMsg = "payload.doc was not provided";
-  }
-
-  //If callback is not a function
-  if (!callback) {
-    throw new Error("A callback function was not provided");
-  } else if (typeof callback !== 'function') {
-    throw new TypeError("callback is not a function")
-  }
-
-  if (!invalid) {
-    // Using request for example - A different npm module may be needed depending on the API communication is being made to
-    // The `soap` module can be used in place of `request` but the logic and data being sent will be different
-    let request = require('request');
-
-    let url = "https://localhost/";
-
-    // Add any headers for the request
-    let headers = {
-
-    };
-
-    // Log URL
-    log("Using URL [" + url + "]", ncUtil);
-
-    // Set options
-    let options = {
-      url: url,
-      method: "GET",
-      headers: headers,
-      body: payload.doc,
-      json: true
-    };
-
-    try {
-      // Pass in our URL and headers
-      request(options, function (error, response, body) {
-        if (!error) {
-          // If no errors, process results here
-          log("Do GetProductMatrixFromQuery Callback", ncUtil);
-          out.response.endpointStatusCode = response.statusCode;
-          out.response.endpointStatusMessage = response.statusMessage;
-
-          let docs = [];
-          let data = body;
-
-          if (response.statusCode === 200) {
-            if (data.products && data.products.length > 0) {
-              for (let i = 0; i < data.products.length; i++) {
-                let product = {
-                  product: body.products[i]
-                };
-                docs.push({
-                  doc: product,
-                  productRemoteID: product.product.id,
-                  productBusinessReference: product.product.id
-                });
-              }
-              if (docs.length === payload.doc.pageSize) {
-                out.ncStatusCode = 206;
-              } else {
-                out.ncStatusCode = 200;
-              }
-              out.payload = docs;
-            } else {
-              out.ncStatusCode = 204;
-              out.payload = data;
-            }
-          } else if (response.statusCode === 429) {
-            out.ncStatusCode = 429;
-            out.payload.error = data;
-          } else if (response.statusCode === 500) {
-            out.ncStatusCode = 500;
-            out.payload.error = data;
-          } else {
-            out.ncStatusCode = 400;
-            out.payload.error = data;
-          }
-
-          callback(out);
-        } else {
-          // If an error occurs, log the error here
-          logError("Do GetProductMatrixFromQuery Callback error - " + error, ncUtil);
-          out.ncStatusCode = 500;
-          out.payload.error = {err: error};
-          callback(out);
-        }
-      });
-    } catch (err) {
-      // Exception Handling
-      logError("Exception occurred in GetProductMatrixFromQuery - " + err, ncUtil);
-      out.ncStatusCode = 500;
-      out.payload.error = {err: err, stack: err.stackTrace};
-      callback(out);
+    function logInfo(msg) {
+        stub.log(msg, "info");
     }
-  } else {
-    // Invalid Request
-    log("Callback with an invalid request - " + invalidMsg, ncUtil);
-    out.ncStatusCode = 400;
-    out.payload.error = invalidMsg;
-    callback(out);
-  }
-};
 
-function logError(msg, ncUtil) {
-  console.log("[error] " + msg);
+    function logWarn(msg) {
+        stub.log(msg, "warn");
+    }
+
+    function logError(msg) {
+        stub.log(msg, "error");
+    }
+
+    async function validateFunction() {
+        if (stub.messages.length === 0) {
+            if (!nc.isNonEmptyArray(stub.channelProfile.channelSettingsValues.subscriptionLists)) {
+                stub.messages.push(
+                    `The channelProfile.channelSettingsValues.subscriptionLists array is ${
+                        stub.channelProfile.channelSettingsValues.subscriptionLists == null ? "missing" : "invalid"
+                    }.`
+                );
+            }
+
+            if (!nc.isObject(stub.payload.doc.modifiedDateRange)) {
+                stub.messages.push(
+                    `The payload.doc.modifiedDateRange object is ${
+                        stub.payload.doc.modifiedDateRange == null ? "missing" : "invalid"
+                    }.`
+                );
+            } else {
+                if (!nc.isNonEmptyString(stub.payload.doc.modifiedDateRange.startDateGMT)) {
+                    stub.messages.push(
+                        `The payload.doc.modifiedDateRange.startDateGMT string is ${
+                            stub.payload.doc.modifiedDateRange.startDateGMT == null ? "missing" : "invalid"
+                        }.`
+                    );
+                }
+                if (!nc.isNonEmptyString(stub.payload.doc.modifiedDateRange.endDateGMT)) {
+                    stub.messages.push(
+                        `The payload.doc.modifiedDateRange.endDateGMT string is ${
+                            stub.payload.doc.modifiedDateRange.endDateGMT == null ? "missing" : "invalid"
+                        }.`
+                    );
+                }
+            }
+        }
+
+        if (stub.messages.length > 0) {
+            stub.messages.forEach(msg => logError(msg));
+            stub.out.ncStatusCode = 400;
+            throw new Error(`Invalid request [${stub.messages.join(" ")}]`);
+        }
+        logInfo("Function is valid.");
+    }
+
+    async function getProductLists() {
+        logInfo("Get product lists...");
+        return await Promise.all(stub.channelProfile.channelSettingsValues.subscriptionLists.map(getProductList));
+    }
+
+    async function getProductList(subscriptionList) {
+        logInfo(`Get product list [${subscriptionList.listId}]...`);
+        const response = await stub.request.get({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://catalogs${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${stub.channelProfile.channelAuthValues.company_id})/Catalog/Items(SourceId=${
+                subscriptionList.listId
+            })`
+        });
+        response.body.Items.forEach(item => {
+            item.subscriptionList = subscriptionList;
+        });
+        return response.body.Items;
+    }
+
+    async function keepMatrixItems(productLists) {
+        logInfo("Keep matrix items...");
+        let totalCount = 0;
+        let matrixCount = 0;
+        const filteredProductLists = productLists.map(productList => {
+            totalCount = totalCount + productList.length;
+            const filtered = [];
+            for (let i = 0; i < productList.length; i++) {
+                const product = productList[i];
+                if (productList.filter(p => p.Slug.split("-")[0] === product.Slug.split("-")[0]).length > 1) {
+                    filtered.push(product);
+                }
+            }
+            matrixCount = matrixCount + filtered.length;
+            return filtered;
+        });
+        logInfo(`${matrixCount} of ${totalCount} products are matrix variants.`);
+        return filteredProductLists;
+    }
+
+    async function flattenProductLists(productLists) {
+        logInfo("Flatten product lists...");
+        return [].concat(...productLists);
+    }
+
+    async function getProductDetails(productList) {
+        logInfo("Get product details...");
+        const allIds = productList.map(p => p.CatalogItemId);
+        const batchedIds = [];
+        const max = 500;
+        let current = 0;
+        do {
+            const batchIds = allIds.slice(current, current + max);
+            batchedIds.push(batchIds);
+            current = current + max;
+        } while (current < allIds.length);
+        const batchedDetails = await Promise.all(batchedIds.map(getProductDetailsBulk));
+        const CatalogItems = Object.assign({}, ...batchedDetails);
+        productList.forEach(product => {
+            product.ProductDetails = CatalogItems[product.CatalogItemId];
+        });
+        return productList;
+    }
+
+    async function getProductDetailsBulk(catalogIds) {
+        logInfo(`Get ${catalogIds.length} product details...`);
+        const response = await stub.request.post({
+            url: `${stub.channelProfile.channelSettingsValues.protocol}://catalogs${
+                stub.channelProfile.channelSettingsValues.environment
+            }.iqmetrix.net/v1/Companies(${
+                stub.channelProfile.channelAuthValues.company_id
+            })/Catalog/Items/ProductDetails/Bulk`,
+            body: {
+                CatalogItemIds: catalogIds
+            }
+        });
+        return response.body.CatalogItems;
+    }
+
+    async function keepModifiedItems(productList) {
+        logInfo("Keep modified items...");
+        const start = Date.parse(stub.payload.doc.modifiedDateRange.startDateGMT);
+        const end = Date.parse(stub.payload.doc.modifiedDateRange.endDateGMT);
+        const products = productList.filter(product => {
+            const headerMod = Date.parse(product.DateUpdatedUtc);
+            const detailMod = Date.parse(product.ProductDetails.DateUpdatedUtc);
+            return (headerMod >= start && headerMod <= end) || (detailMod >= start && detailMod <= end);
+        });
+        logInfo(
+            `${products.length} of ${productList.length} products have been modified withing the given date range.`
+        );
+        return products;
+    }
+
+    async function filterVendors(productList) {
+        logInfo("Filter vendors...");
+        productList.forEach(product => {
+            const supplierId = product.subscriptionList.supplierId;
+            const VendorSkus = product.ProductDetails.VendorSkus.filter(vendor => {
+                return vendor.Entity && vendor.Entity.Id === supplierId;
+            });
+            product.VendorSku = VendorSkus[0];
+        });
+        return productList;
+    }
+
+    async function buildResponseObject(products) {
+        if (products.length > 0) {
+            logInfo(`Submitting ${products.length} modified products...`);
+            stub.out.ncStatusCode = 200;
+            stub.out.payload = [];
+            products.forEach(product => {
+                stub.out.payload.push({
+                    doc: product,
+                    productMatrixRemoteID: product.CatalogItemId,
+                    productMatrixBusinessReference: nc.extractBusinessReferences(
+                        stub.channelProfile.productMatrixBusinessReferences,
+                        product
+                    )
+                });
+            });
+        } else {
+            logInfo("No modified products found.");
+            stub.out.ncStatusCode = 204;
+        }
+    }
+
+    async function handleError(error) {
+        logError(error);
+        if (error.name === "StatusCodeError") {
+            stub.out.response.endpointStatusCode = error.statusCode;
+            stub.out.response.endpointStatusMessage = error.message;
+            if (error.statusCode >= 500) {
+                stub.out.ncStatusCode = 500;
+            } else if (error.statusCode === 429) {
+                logWarn("Request was throttled.");
+                stub.out.ncStatusCode = 429;
+            } else {
+                stub.out.ncStatusCode = 400;
+            }
+        }
+        stub.out.payload.error = error;
+        stub.out.ncStatusCode = stub.out.ncStatusCode || 500;
+    }
 }
 
-function log(msg, ncUtil) {
-  console.log("[info] " + msg);
-}
-
-module.exports.GetProductMatrixFromQuery = GetProductFromQuery;
+module.exports.GetProductMatrixFromQuery = GetProductMatrixFromQuery;
