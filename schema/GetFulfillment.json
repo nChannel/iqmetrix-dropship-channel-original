@@ -1,5 +1,5 @@
 {
-	"name": "iQmetrix Get Fulfillment",
+	"name": "iQmetrix DropShip Get Fulfillment Schema",
 	"schemaDef": {
 	  "$id": "http://example.com/example.json",
 	  "type": "object",

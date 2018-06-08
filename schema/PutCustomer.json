@@ -1,5 +1,5 @@
 {
-  "name": "iQmetrix Put Customer Schema",
+  "name": "iQmetrix DropShip Put Customer Schema",
   "schemaDef": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",

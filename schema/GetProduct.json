@@ -1,5 +1,5 @@
 {
-  "name": "iQmetrix Get Product Schema",
+  "name": "iQmetrix DropShip Get Product Schema",
   "schemaDef": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "iQmetrix Get Product Schema",

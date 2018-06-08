@@ -1,5 +1,5 @@
 {
-  "name": "iQmetrix Put Sales Order Schema",
+  "name": "iQmetrix DropShip Put Sales Order Schema",
   "schemaDef": {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "iQmetrix Put Sales Order Schema",
